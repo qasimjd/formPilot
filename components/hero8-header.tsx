@@ -17,7 +17,7 @@ export const HeroHeader = () => {
             <div className="flex w-full items-center justify-between gap-12 lg:w-auto">
               <Link href="/" aria-label="home" className="flex items-center space-x-2">
                 <Image src="/logo.svg" alt="Logo" width={40} height={40} className="h-8 w-8" />
-                <span className="hidden font-bold lg:inline-block">FormPilot</span>
+                <h2 className="hidden font-bold text-xl lg:inline-block">FormPilot</h2>
               </Link>
             </div>
 

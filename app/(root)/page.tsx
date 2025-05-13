@@ -6,6 +6,8 @@ import { HeroHeader } from "@/components/hero8-header"
 export default function HomePage() {
   return (
     <>
+      <HeroHeader />
+
       <main className="overflow-x-hidden">
         <section>
           <div className="pb-24 pt-12 md:pb-32 lg:pb-56 lg:pt-44">

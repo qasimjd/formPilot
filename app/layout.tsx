@@ -3,7 +3,6 @@ import { Geist } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ClerkProvider } from "@clerk/nextjs";
-import { HeroHeader } from "@/components/hero8-header";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,14 +23,13 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
         <body
-          className={`${geistSans.variable} antialiased `}
+          className={`${geistSans.variable} antialiased  text-gray-200`}
         >
           <ThemeProvider
             attribute="class"
             defaultTheme="dark"
           >
             <main className="flex min-h-screen flex-col">
-              <HeroHeader />
               {children}
             </main>
           </ThemeProvider>
