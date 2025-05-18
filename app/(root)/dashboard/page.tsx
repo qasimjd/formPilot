@@ -1,5 +1,3 @@
-import CreateForm from '@/components/createForm'
-
 
 const page = () => {
     return (

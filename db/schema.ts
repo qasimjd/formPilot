@@ -1,6 +1,6 @@
 import { timestamp, pgTable, text, uuid, varchar } from "drizzle-orm/pg-core";
 
-export const usersTable = pgTable("jsonForms", {
+export const JsonForms = pgTable("jsonForms", {
 
     id: uuid("id").defaultRandom().primaryKey(),
     formData: text("form_data").notNull(),

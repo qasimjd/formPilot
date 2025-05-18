@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
+import { Raleway as RalewayFont } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ClerkProvider } from "@clerk/nextjs";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const Raleway = RalewayFont({
+  variable: "--font-raleway",
   subsets: ["latin"],
 });
 
@@ -22,13 +22,8 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
-        <body
-          className={`${geistSans.variable} antialiased  text-gray-200`}
-        >
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="dark"
-          >
+        <body className={`${Raleway.variable} antialiased font-Raleway`}>
+          <ThemeProvider defaultTheme="light">
             <main className="flex min-h-screen flex-col">
               {children}
             </main>
