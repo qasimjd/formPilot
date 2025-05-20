@@ -1,125 +1,62 @@
-import { db } from "@/db";
-import { JsonForms } from "@/db/schema";
-import { auth } from "@clerk/nextjs/server";
-import { and, eq } from "drizzle-orm";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
-import {
-    RadioGroup,
-    RadioGroupItem,
-} from "@/components/ui/radio-group";
-import { Label } from "@/components/ui/label";
-import {
-    Card,
-    CardContent,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card";
-import EditField from "@/components/EditField";
+"use client";
+
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
+import { Card, CardContent } from "@/components/ui/card";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { MoveLeft } from "lucide-react";
+import EditPageSidebar from "@/components/EditFormSidebar";
+import FormUI from "@/components/FormUI";
+import { getFormById } from "@/db/actions/form.action";
+import EditPageHeader from "@/components/EditPageHeader";
 
-interface Field {
-    id: string;
-    name: string;
-    label: string;
-    type: string;
-    placeholder?: string;
-    required?: boolean;
-    options?: string[];
-}
+const EditFormPage = () => {
+    const params = useParams();
+    const { id } = params as { id: string };
+    const [form, setForm] = useState<any>(null);
+    const [parsedFormData, setParsedFormData] = useState<any>(null);
+    const [error, setError] = useState<string | null>(null);
+    const [loading, setLoading] = useState(true);
 
-interface FormData {
-    title: string;
-    fields: Field[];
-}
+    useEffect(() => {
+        const fetchForm = async () => {
+            setLoading(true);
+            setError(null);
+            try {
+                const formData = await getFormById(id);
+                if (!formData) {
+                    setError("Form not found or unauthorized access.");
+                    setLoading(false);
+                    return;
+                }
+                setForm(formData);
+                try {
+                    const cleaned = formData.formData.replace(/```json|```/g, "").trim();
+                    const parsed = JSON.parse(cleaned);
+                    if (!parsed.fields || !Array.isArray(parsed.fields)) {
+                        throw new Error("Invalid form fields");
+                    }
+                    setParsedFormData(parsed);
+                } catch (e) {
+                    setError("Invalid form data. Please try again.");
+                }
+            } catch (e) {
+                setError("Failed to fetch form data.");
+            } finally {
+                setLoading(false);
+            }
+        };
+        if (id) fetchForm();
+    }, [id]);
 
-const renderField = (field: Field) => {
-    switch (field.type) {
-        case "text":
-        case "email":
-        case "date":
-        case "number":
-        case "tel":
-            return (
-                <Input
-                    id={field.name}
-                    name={field.name}
-                    type={field.type}
-                    placeholder={field.placeholder}
-                    required={field.required}
-                />
-            );
-        case "textarea":
-            return (
-                <Textarea
-                    id={field.name}
-                    name={field.name}
-                    placeholder={field.placeholder}
-                    required={field.required}
-                />
-            );
-        case "dropdown":
-            return (
-                <Select>
-                    <SelectTrigger id={field.name}>
-                        <SelectValue placeholder={field.placeholder} />
-                    </SelectTrigger>
-                    <SelectContent>
-                        {field.options?.map((option) => (
-                            <SelectItem key={option} value={option}>
-                                {option}
-                            </SelectItem>
-                        ))}
-                    </SelectContent>
-                </Select>
-            );
-        case "radio":
-            return (
-                <RadioGroup>
-                    {field.options?.map((option) => (
-                        <div key={option} className="flex items-center space-x-2">
-                            <RadioGroupItem
-                                value={option}
-                                id={`${field.name}-${option}`}
-                            />
-                            <Label htmlFor={`${field.name}-${option}`}>{option}</Label>
-                        </div>
-                    ))}
-                </RadioGroup>
-            );
-        default:
-            return <p className="text-sm text-muted-foreground">Unsupported field type</p>;
-    }
-};
-
-const editFormPage = async ({ params }: { params: { id: string } }) => {
-    const { id } = params;
-    const { userId } = await auth();
-
-    if (!userId) return null;
-
-    const results = await db
-        .select()
-        .from(JsonForms)
-        .where(and(eq(JsonForms.id, id), eq(JsonForms.createdBy, userId)));
-    const form = results[0];
-
-    if (!form) {
+    if (loading) {
         return (
             <main className="flex items-center justify-center min-h-[60vh]">
                 <Card>
                     <CardContent>
-                        <div className="text-center text-lg font-semibold text-red-500 py-8">
-                            Form not found or unauthorized access.
+                        <div className="text-center text-lg font-semibold py-8">
+                            Loading...
                         </div>
                     </CardContent>
                 </Card>
@@ -127,15 +64,7 @@ const editFormPage = async ({ params }: { params: { id: string } }) => {
         );
     }
 
-    let parsedFormData: FormData;
-    try {
-        const cleaned = form.formData.replace(/```json|```/g, "").trim();
-        parsedFormData = JSON.parse(cleaned);
-
-        if (!parsedFormData.fields || !Array.isArray(parsedFormData.fields)) {
-            throw new Error("Invalid form fields");
-        }
-    } catch (error) {
+    if (error) {
         return (
             <main className="flex items-center justify-center min-h-[60vh]">
                 <Card>
@@ -151,7 +80,7 @@ const editFormPage = async ({ params }: { params: { id: string } }) => {
                             </Link>
                         </Button>
                         <div className="text-center text-lg font-semibold text-red-500 py-8">
-                            Invalid form data. Please try again.
+                            {error}
                         </div>
                     </CardContent>
                 </Card>
@@ -160,49 +89,16 @@ const editFormPage = async ({ params }: { params: { id: string } }) => {
     }
 
     return (
-        <main className="flex items-center justify-center py-10">
-            <Button
-                asChild
-                size="sm"
-                className="absolute top-4 left-4"
-            >
-                <Link href="/dashboard">
-                    <MoveLeft />
-                    Back
-                </Link>
-            </Button>
-
-            <Card className="w-full max-w-2xl">
-                <CardHeader>
-                    <CardTitle className="text-2xl font-bold">
-                        {parsedFormData.title}
-                    </CardTitle>
-                </CardHeader>
-
-                <CardContent>
-                    <form className="space-y-6">
-                        {parsedFormData.fields.map((field) => (
-                            <div key={field.name} className="space-y-2">
-                                <div className="flex items-center justify-between">
-                                    <Label
-                                        htmlFor={field.name}
-                                        className="font-medium flex justify-between items-center"
-                                    >
-                                        {field.label}
-                                        {field.required && (
-                                            <span className="text-red-500 ml-1">*</span>
-                                        )}
-                                    </Label>
-                                    <EditField defaultValue={field} formId={id} />
-                                </div>
-                                {renderField(field)}
-                            </div>
-                        ))}
-                    </form>
-                </CardContent>
-            </Card>
-        </main>
+        <>
+            <EditPageHeader />
+            <main className="flex gap-[2%] flex-wrap content-start" >
+                <div className="relative max-lg:hidden w-1/4 p-4 h-screen">
+                    <EditPageSidebar />
+                </div>
+                <FormUI parsedFormData={parsedFormData} id={id} />
+            </main >
+        </>
     );
 };
 
-export default editFormPage;
+export default EditFormPage;

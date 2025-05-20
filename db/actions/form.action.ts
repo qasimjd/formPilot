@@ -162,3 +162,27 @@ export const deleteFieldFromDatabase = async (fieldId: string, formId: string) =
 
     }
 };
+
+export const getFormById = async (id: string) => {
+    try {
+        const { userId } = await auth();
+        if (!userId) {
+            throw new Error("Unauthorized: No user found");
+        }
+
+        const results = await db
+            .select()
+            .from(JsonForms)
+            .where(and(eq(JsonForms.id, id), eq(JsonForms.createdBy, userId)));
+        const form = results[0];
+
+        if (!results.length) {
+            throw new Error("Form not found or access denied");
+        }
+
+        return form;
+    } catch (error) {
+        console.error("Error getting form by ID:", error);
+        throw new Error("Failed to get form");
+    }
+}
