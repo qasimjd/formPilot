@@ -1,17 +1,36 @@
 "use client";
 
+import { useState } from "react";
 import { useFormStore } from "@/store/formStore";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { cn } from "@/lib/utils";
 import { backgrounds, themes, borders } from "@/lib/constent";
+import { updateFormStyles } from "@/db/actions/form.action";
+import { Loader2 } from "lucide-react";
 
-export default function EditFormSidebar() {
+export default function EditFormSidebar({ formId }: { formId: string }) {
 	const theme = useFormStore((state) => state.theme);
 	const setTheme = useFormStore((state) => state.setTheme);
 	const formBackground = useFormStore((state) => state.formBackground);
 	const setFormBackground = useFormStore((state) => state.setFormBackground);
 	const borderStyle = useFormStore((state) => state.borderStyle);
 	const setBorderStyle = useFormStore((state) => state.setBorderStyle);
+	const [saving, setSaving] = useState(false);
+
+	const handleUpdate = async (key: "theme" | "formBackground" | "borderStyle", value: string) => {
+		if (!formId) return;
+		setSaving(true);
+		try {
+			const res = await updateFormStyles({
+				formId,
+				theme: key === "theme" ? value : theme,
+				formBackground: key === "formBackground" ? value : formBackground,
+				borderStyle: key === "borderStyle" ? value : borderStyle,
+			});
+		} finally {
+			setSaving(false);
+		}
+	};
 
 	return (
 		<aside className="border border-primary rounded-2xl p-4 space-y-8 bg-background shadow-2xl w-full max-w-xs md:max-w-sm lg:max-w-xs min-w-[220px] transition-all duration-300 backdrop-blur-md z-20">
@@ -21,7 +40,10 @@ export default function EditFormSidebar() {
 				</h3>
 				<RadioGroup
 					value={theme}
-					onValueChange={setTheme}
+					onValueChange={(val) => {
+						setTheme(val);
+						handleUpdate("theme", val);
+					}}
 					className="flex flex-wrap gap-3"
 				>
 					{themes.map((t) => (
@@ -46,7 +68,10 @@ export default function EditFormSidebar() {
 				<div className="max-h-52 overflow-y-auto pr-1 custom-scrollbar">
 					<RadioGroup
 						value={formBackground}
-						onValueChange={setFormBackground}
+						onValueChange={(val) => {
+							setFormBackground(val);
+							handleUpdate("formBackground", val);
+						}}
 						className="space-y-2"
 					>
 						{backgrounds.map((bg) => (
@@ -79,7 +104,10 @@ export default function EditFormSidebar() {
 				<div className="max-h-48 overflow-y-auto pr-1 custom-scrollbar">
 					<RadioGroup
 						value={borderStyle}
-						onValueChange={setBorderStyle}
+						onValueChange={(val) => {
+							setBorderStyle(val);
+							handleUpdate("borderStyle", val);
+						}}
 						className="space-y-2"
 					>
 						{borders.map((b) => (
@@ -99,6 +127,11 @@ export default function EditFormSidebar() {
 					</RadioGroup>
 				</div>
 			</div>
+			{saving && (
+				<div className="flex items-center gap-2 text-primary text-sm pt-2">
+					<Loader2 className="animate-spin size-4" /> Saving...
+				</div>
+			)}
 		</aside>
 	);
 }

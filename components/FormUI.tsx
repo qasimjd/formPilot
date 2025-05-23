@@ -5,13 +5,16 @@ import { Card, CardContent, CardHeader, CardTitle } from './ui/card'
 import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { Textarea } from './ui/textarea';
-import { useState } from 'react';
 import { RadioGroup, RadioGroupItem } from './ui/radio-group';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { useFormStore } from '@/store/formStore';
 import { cn } from '@/lib/utils';
+import { useState } from 'react';
+import { getFormById } from '@/db/actions/form.action';
+import FormSkeleton from './FormSkeleton';
+import { usePathname } from 'next/navigation';
 
-export const renderField = (field: Field) => {
+export const renderField = (field: Field, userInput: any, handleInputChange: any, handleSelectChange: any, handleRadioChange: any) => {
     switch (field.type) {
         case "text":
         case "email":
@@ -25,6 +28,8 @@ export const renderField = (field: Field) => {
                     type={field.type}
                     placeholder={field.placeholder}
                     required={field.required}
+                    value={userInput[field.name] || ''}
+                    onChange={handleInputChange}
                 />
             );
         case "textarea":
@@ -34,11 +39,13 @@ export const renderField = (field: Field) => {
                     name={field.name}
                     placeholder={field.placeholder}
                     required={field.required}
+                    value={userInput[field.name] || ''}
+                    onChange={handleInputChange}
                 />
             );
         case "dropdown":
             return (
-                <Select>
+                <Select onValueChange={(value) => handleSelectChange(field.name, value)}>
                     <SelectTrigger id={field.name}>
                         <SelectValue placeholder={field.placeholder} />
                     </SelectTrigger>
@@ -53,7 +60,7 @@ export const renderField = (field: Field) => {
             );
         case "radio":
             return (
-                <RadioGroup>
+                <RadioGroup value={userInput[field.name]} onValueChange={(value) => handleRadioChange(field.name, value)}>
                     {field.options?.map((option) => (
                         <div key={option} className="flex items-center space-x-2">
                             <RadioGroupItem
@@ -71,39 +78,103 @@ export const renderField = (field: Field) => {
 };
 
 
-const FormUi = ({ parsedFormData, id }: { parsedFormData: FormData, id: string}) => {
+const FormUi = ({ parsedFormData, id }: { parsedFormData: FormData, id: string }) => {
+    const { theme, formBackground, borderStyle } = useFormStore();
+    const [formData, setFormData] = useState(parsedFormData);
+    const [loading, setLoading] = useState(false);
+    const [userInput, setUserInput] = useState<any>({});
 
-const { theme, formBackground, borderStyle } = useFormStore();
+    const pathname = usePathname();
+
+    const handleFieldChange = async () => {
+        setLoading(true);
+        try {
+            const form = await getFormById(id);
+            const cleaned = form.formData.replace(/```json|```/g, "").trim();
+            const parsed = JSON.parse(cleaned);
+            setFormData(parsed);
+        } catch (e) {
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const { name, value, type } = e.target;
+        const checked = type === 'checkbox' ? (e.target as HTMLInputElement).checked : false;
+        setUserInput((prev: any) => ({
+            ...prev,
+            [name]: type === 'checkbox' ? checked : value
+        }));
+    };
+
+    const handleSelectChange = (name: string, value: string) => {
+        setUserInput((prev: any) => ({
+            ...prev,
+            [name]: value
+        }));
+    };
+
+    const handleRadioChange = (name: string, value: string) => {
+        setUserInput((prev: any) => ({
+            ...prev,
+            [name]: value
+        }));
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setLoading(true);
+        try {
+            await fetch('/api/save-form-response', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ formId: id, userInput }),
+            });
+            // Optionally show a success message or reset form
+        } catch (error) {
+            // Optionally show error
+        } finally {
+            setLoading(false);
+        }
+    };
 
     return (
         <div className={cn("grow text-center p-4", formBackground)}>
             <Card className={cn("w-full mx-auto max-w-2xl", theme, borderStyle)}>
                 <CardHeader>
                     <CardTitle className="text-2xl font-bold">
-                        {parsedFormData.title}
+                        {formData.title}
                     </CardTitle>
                 </CardHeader>
 
                 <CardContent>
-                    <form className="space-y-6">
-                        {parsedFormData.fields.map((field) => (
-                            <div key={field.name} className="space-y-2">
-                                <div className="flex items-center justify-between">
-                                    <Label
-                                        htmlFor={field.name}
-                                        className="font-medium flex justify-between items-center"
-                                    >
-                                        {field.label}
-                                        {field.required && (
-                                            <span className="text-red-500 ml-1">*</span>
+                    {loading ? (
+                        <FormSkeleton />
+                    ) : (
+                        <form className="space-y-6" onSubmit={handleSubmit}>
+                            {formData.fields.map((field: any) => (
+                                <div key={field.name} className="space-y-2">
+                                    <div className="flex items-center justify-between">
+                                        <Label
+                                            htmlFor={field.name}
+                                            className="font-medium flex justify-between items-center"
+                                        >
+                                            {field.label}
+                                            {field.required && (
+                                                <span className="text-red-500 ml-1">*</span>
+                                            )}
+                                        </Label>
+                                        {pathname.startsWith("/edit-form/") && (
+                                            <EditField defaultValue={field} formId={id} onFieldChange={handleFieldChange} />
                                         )}
-                                    </Label>
-                                    <EditField defaultValue={field} formId={id} />
+                                    </div>
+                                    {renderField(field, userInput, handleInputChange, handleSelectChange, handleRadioChange)}
                                 </div>
-                                {renderField(field)}
-                            </div>
-                        ))}
-                    </form>
+                            ))}
+                            <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Save</button>
+                        </form>
+                    )}
                 </CardContent>
             </Card>
         </div>

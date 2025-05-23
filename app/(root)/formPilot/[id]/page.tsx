@@ -6,21 +6,20 @@ import { Card, CardContent } from "@/components/ui/card";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { MoveLeft } from "lucide-react";
-import EditPageSidebar from "@/components/EditFormSidebar";
 import FormUI from "@/components/FormUI";
 import { getFormById } from "@/db/actions/form.action";
-import EditPageHeader from "@/components/EditPageHeader";
 import { useFormStore } from "@/store/formStore";
 import FormSkeleton from "@/components/FormSkeleton";
 
-const EditFormPage = () => {
+
+const page = () => {
     const params = useParams();
     const { id } = params as { id: string };
     const [parsedFormData, setParsedFormData] = useState<any>(null);
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
 
-    const { setFormId, previewMode, setTheme, setFormBackground, setBorderStyle } = useFormStore();
+    const { setTheme, setFormBackground, setBorderStyle } = useFormStore();
 
     useEffect(() => {
         const fetchForm = async () => {
@@ -36,7 +35,6 @@ const EditFormPage = () => {
                 setTheme(formData.theme);
                 setFormBackground(formData.formBackground);
                 setBorderStyle(formData.borderStyle);
-                setFormId(formData.id);
                 try {
                     const cleaned = formData.formData.replace(/```json|```/g, "").trim();
                     const parsed = JSON.parse(cleaned);
@@ -97,24 +95,9 @@ const EditFormPage = () => {
 
     return (
         <>
-            {previewMode ? (
-                <>
-                    <EditPageHeader />
-                    <FormUI parsedFormData={parsedFormData} id={id} />
-                </>
-            ) : (
-                <>
-                    <EditPageHeader />
-                    <main className="flex gap-[2%] flex-wrap content-start" >
-                        <div className="relative max-lg:hidden w-1/4 p-4 h-screen">
-                            <EditPageSidebar formId={id} />
-                        </div>
-                        <FormUI parsedFormData={parsedFormData} id={id} />
-                    </main>
-                </>
-            )}
+            <FormUI parsedFormData={parsedFormData} id={id} />
         </>
     );
 };
 
-export default EditFormPage;
+export default page;

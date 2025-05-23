@@ -103,17 +103,34 @@ export const backgrounds = [
     label: "Gradient Rose",
     value: "bg-gradient-to-r from-rose-200 via-rose-300 to-pink-300",
   },
+  {
+    label: "Gradient Emerald",
+    value: "bg-gradient-to-br from-emerald-200 to-green-300",
+  },
+  {
+    label: "Gradient Sky",
+    value: "bg-gradient-to-r from-sky-200 via-blue-300 to-indigo-300",
+  },
+  {
+    label: "Sunset",
+    value: "bg-gradient-to-r from-yellow-300 via-red-300 to-pink-400",
+  },
   { label: "Amber", value: "bg-amber-400" },
-  { label: "Dark", value: "bg-black"},
   { label: "Light", value: "bg-white" },
+  { label: "Dark", value: "bg-black" },
 ];
 
 export const borders = [
-  { label: "Thin Gray", value: "border border-gray-300", previewBg: "bg-white" },
+  { label: "Accent Right", value: "border-r-6 border-r-black", previewBg: "bg-white" },
+  { label: "Groove Border", value: "border-4 border-gray-400 border-groove", previewBg: "bg-white" },
   { label: "Thick Blue", value: "border-4 border-blue-400", previewBg: "bg-white" },
   { label: "Dashed Amber", value: "border-2 border-amber-400 border-dashed", previewBg: "bg-white" },
   { label: "Double Slate", value: "border-double border-4 border-slate-500", previewBg: "bg-white" },
   { label: "Rounded Shadow", value: "border border-gray-300 rounded-xl shadow-lg", previewBg: "bg-white" },
+  { label: "Right Medium", value: "border-r-2 border-indigo-400", previewBg: "bg-white" },
+  { label: "Left Medium", value: "border-l-2 border-emerald-400", previewBg: "bg-white" },
+  { label: "Dotted Purple", value: "border-2 border-purple-500 border-dotted", previewBg: "bg-white" },
+  { label: "Glow Border", value: "border-2 border-blue-400 shadow-[0_0_10px_rgba(59,130,246,0.5)]", previewBg: "bg-white" },
+  { label: "Bottom Highlight", value: "border-b-6 border-b-yellow-400 hover:border-b-yellow-600 transition-colors", previewBg: "bg-white" },
   { label: "None", value: "border-0", previewBg: "bg-white" },
 ];
-

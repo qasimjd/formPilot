@@ -11,7 +11,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { deleteFieldFromDatabase, updateFieldInDatabase } from "@/db/actions/form.action";
-import { useRouter } from "next/navigation";
 
 interface FieldType {
     id: string;
@@ -26,9 +25,10 @@ interface FieldType {
 interface EditFieldProps {
     defaultValue: FieldType;
     formId: string;
+    onFieldChange?: () => void; // Add callback prop
 }
 
-const EditField = ({ defaultValue, formId }: EditFieldProps) => {
+const EditField = ({ defaultValue, formId, onFieldChange }: EditFieldProps) => {
     const [label, setLabel] = useState<string>(defaultValue.label || "");
     const [placeholder, setPlaceholder] = useState<string>(defaultValue.placeholder || "");
     const [isSaving, setIsSaving] = useState(false);
@@ -36,7 +36,6 @@ const EditField = ({ defaultValue, formId }: EditFieldProps) => {
     const [isEditOpen, setIsEditOpen] = useState(false);
     const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
-    const router = useRouter();
 
     const handleEdit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -50,9 +49,11 @@ const EditField = ({ defaultValue, formId }: EditFieldProps) => {
         };
 
         try {
-            await updateFieldInDatabase(updatedField, formId);
-            router.refresh();
-            setIsEditOpen(false); // ✅ Close the edit popover
+            const res = await updateFieldInDatabase(updatedField, formId);
+            if (res.success && onFieldChange) {
+                onFieldChange();
+            }
+            setIsEditOpen(false);
         } catch (err) {
             console.error("Failed to update field:", err);
         } finally {
@@ -64,7 +65,7 @@ const EditField = ({ defaultValue, formId }: EditFieldProps) => {
         setIsDeleting(true);
         try {
             await deleteFieldFromDatabase(defaultValue.id, formId);
-            router.refresh();
+            if (onFieldChange) onFieldChange(); // Notify parent to refresh
             setIsDeleteOpen(false);
         } catch (err) {
             console.error("Failed to delete field:", err);

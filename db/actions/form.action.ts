@@ -4,6 +4,7 @@ import { auth } from "@clerk/nextjs/server";
 import { db } from '@/db';
 import { JsonForms } from "../schema";
 import { and, eq } from "drizzle-orm";
+import { date } from "drizzle-orm/mysql-core";
 
 
 export const saveFormToDatabase = async (formData: any) => {
@@ -111,7 +112,10 @@ export const updateFieldInDatabase = async (
             .returning({ id: JsonForms.id });
 
 
-        return updated[0].id;
+        return {
+            success:true,
+            date: updated[0]
+        };
     } catch (error) {
         console.error("Error updating field in database:", error);
         throw new Error("Failed to update field");
@@ -186,3 +190,25 @@ export const getFormById = async (id: string) => {
         throw new Error("Failed to get form");
     }
 }
+
+export const updateFormStyles = async ({ formId, theme, formBackground, borderStyle }: { formId: string, theme: string, formBackground: string, borderStyle: string }) => {
+    try {
+        const { userId } = await auth();
+        if (!userId) throw new Error("Unauthorized: No user found");
+        const updated = await db
+            .update(JsonForms)
+            .set({
+                theme,
+                formBackground,
+                borderStyle,
+                updatedAt: new Date(),
+            })
+            .where(and(eq(JsonForms.id, formId), eq(JsonForms.createdBy, userId)))
+            .returning({ id: JsonForms.id });
+        if (!updated.length) throw new Error("Failed to update form styles");
+        return { success: true, id: updated[0].id };
+    } catch (error) {
+        console.error("Error updating form styles:", error);
+        throw new Error("Failed to update form styles");
+    }
+};
