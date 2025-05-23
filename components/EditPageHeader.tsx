@@ -1,38 +1,36 @@
 "use client";
-import Link from "next/link";
+
 import { Button } from "@/components/ui/button";
-import Image from "next/image";
 import { useFormStore } from "@/store/formStore";
-import { ArrowBigLeftDash, Eye, Share2Icon } from "lucide-react";
+import { ArrowLeft, Eye } from "lucide-react";
+import ShareButton from "@/components/shareButton";
 
 export default function EditPageHeader() {
 
-    const { previewMode, setPreviewMode } = useFormStore();
-    const { formId } = useFormStore();
+    const { previewMode, setPreviewMode, title, formId } = useFormStore();
 
     return (
-        <header className="w-full border-b bg-background/50 backdrop-blur-3xl z-30 sticky top-0">
-            <div className="flex items-center justify-between px-2 sm:px-4 lg:px-6 py-3 max-w-7xl mx-auto">
+        <header className={`w-full ${previewMode ? 'max-w-4xl' : ''} min-w-[220px] my-4 mx-auto border border-primary rounded-2xl bg-background/70 shadow-lg backdrop-blur-lg z-30 sticky top-0 px-6 py-2 flex flex-col`}>
+            <div className="flex items-center justify-between w-full">
                 {/* Branding (left) */}
-                <Link href="/" className="flex items-center gap-1 select-none" aria-label="home">
-                    <Image src="/logo.svg" alt="Logo" width={36} height={36} className="h-9 w-9" />
-                    <span className="font-bold lg:text-xl tracking-tight inline-block">FormPilot</span>
-                </Link>
+                <div className="flex items-center gap-3">
+                    <div className="bg-primary/10 rounded-full p-2 shadow-inner">
+                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="16" cy="16" r="16" fill="#2563eb" fillOpacity="0.1"/>
+                            <text x="50%" y="55%" textAnchor="middle" fill="#2563eb" fontSize="16" fontWeight="bold" dy=".3em">FP</text>
+                        </svg>
+                    </div>
+                    <h2 className="text-xl font-bold tracking-tight text-primary drop-shadow-sm">{previewMode? "Preview Mode": "Edit your Form"}</h2>
+                </div>
                 {/* Buttons (right) */}
-                <div className="flex gap-2">
-                    <Button variant="outline" size="sm" className="cursor-pointer font-semibold max-lg:hidden"
+                <div className="flex gap-2 items-center">
+                    <Button variant="outline" size="sm" className="cursor-pointer font-semibold max-lg:hidden border-primary/40 bg-white/70 hover:bg-primary/10 transition-colors shadow"
                         onClick={() => setPreviewMode(!previewMode)}
                     >
-                        {previewMode ? <ArrowBigLeftDash /> : <Eye />}
+                        {previewMode ? <ArrowLeft className="mr-1" /> : <Eye className="mr-1" />}
                         {previewMode ? 'Back' : 'Preview'}
                     </Button>
-
-                    <Button size="sm" className="cursor-pointer font-semibold">
-                        <Link href={`/formPilot/${formId}`} className="flex items-center gap-1" target="_blank">
-                            <Share2Icon />
-                            <span className="max-lg:hidden">Share</span>
-                        </Link>
-                    </Button>
+                    <ShareButton formId={formId} title={title} />
                 </div>
             </div>
         </header>

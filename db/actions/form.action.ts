@@ -3,8 +3,8 @@
 import { auth } from "@clerk/nextjs/server";
 import { db } from '@/db';
 import { JsonForms } from "../schema";
-import { and, eq } from "drizzle-orm";
-import { date } from "drizzle-orm/mysql-core";
+import { and, eq, desc } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
 
 
 export const saveFormToDatabase = async (formData: any) => {
@@ -51,7 +51,6 @@ export const findeFormById = async (id: string) => {
         throw new Error("Failed to find form");
     }
 }
-
 interface FieldType {
     id: string;
     name: string;
@@ -211,4 +210,44 @@ export const updateFormStyles = async ({ formId, theme, formBackground, borderSt
         console.error("Error updating form styles:", error);
         throw new Error("Failed to update form styles");
     }
+};
+
+export const getUserForms = async () => {
+  try {
+    const { userId } = await auth();
+    if (!userId) throw new Error('Unauthorized');
+    const results = await db
+      .select()
+      .from(JsonForms)
+      .where(eq(JsonForms.createdBy, userId))
+      .orderBy(desc(JsonForms.createdAt));
+    // Parse formData for title if possible
+    return results.map((form: any) => {
+      let title = 'Untitled Form';
+      try {
+        const cleaned = form.formData.replace(/```json|```/g, '').trim();
+        const parsed = JSON.parse(cleaned);
+        if (parsed.title) title = parsed.title;
+      } catch {}
+      return {
+        id: form.id,
+        title,
+        createdAt: form.createdAt,
+      };
+    });
+  } catch (error) {
+    return [];
+  }
+};
+
+export const deleteFormById = async (id: string) => {
+  try {
+    const { userId } = await auth();
+    if (!userId) throw new Error('Unauthorized');
+    await db.delete(JsonForms).where(and(eq(JsonForms.id, id), eq(JsonForms.createdBy, userId)));
+    revalidatePath(`/dashboard`);
+    return true;
+  } catch (error) {
+    return false;
+  }
 };

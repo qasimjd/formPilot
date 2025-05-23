@@ -13,6 +13,8 @@ import { useState } from 'react';
 import { getFormById } from '@/db/actions/form.action';
 import FormSkeleton from './FormSkeleton';
 import { usePathname } from 'next/navigation';
+import { Button } from './ui/button';
+import { toast } from "sonner"
 
 export const renderField = (field: Field, userInput: any, handleInputChange: any, handleSelectChange: any, handleRadioChange: any) => {
     switch (field.type) {
@@ -126,14 +128,21 @@ const FormUi = ({ parsedFormData, id }: { parsedFormData: FormData, id: string }
         e.preventDefault();
         setLoading(true);
         try {
-            await fetch('/api/save-form-response', {
+            setLoading(true);
+            const response = await fetch('/api/save-form-response', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ formId: id, userInput }),
             });
-            // Optionally show a success message or reset form
-        } catch (error) {
-            // Optionally show error
+            if (response.ok) {
+                toast.success('Form saved successfully!');
+                setUserInput({});
+            } else {
+                const data = await response.json();
+                toast.error(data.error || 'Failed to save form.');
+            }
+        } catch (error: any) {
+            toast.error(error?.message || 'An error occurred.');
         } finally {
             setLoading(false);
         }
@@ -146,6 +155,9 @@ const FormUi = ({ parsedFormData, id }: { parsedFormData: FormData, id: string }
                     <CardTitle className="text-2xl font-bold">
                         {formData.title}
                     </CardTitle>
+                    {formData.subheading && (
+                        <p className="text-muted-foreground mt-1">{formData.subheading}</p>
+                    )}
                 </CardHeader>
 
                 <CardContent>
@@ -172,7 +184,7 @@ const FormUi = ({ parsedFormData, id }: { parsedFormData: FormData, id: string }
                                     {renderField(field, userInput, handleInputChange, handleSelectChange, handleRadioChange)}
                                 </div>
                             ))}
-                            <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Save</button>
+                            <Button type="submit" className="flex justify-self-end-safe cursor-pointer">Save</Button>
                         </form>
                     )}
                 </CardContent>

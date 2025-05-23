@@ -33,7 +33,7 @@ export default function EditFormSidebar({ formId }: { formId: string }) {
 	};
 
 	return (
-		<aside className="border border-primary rounded-2xl p-4 space-y-8 bg-background shadow-2xl w-full max-w-xs md:max-w-sm lg:max-w-xs min-w-[220px] transition-all duration-300 backdrop-blur-md z-20">
+		<aside className="border border-primary rounded-2xl p-4 space-y-8 bg-background shadow-2xl w-full max-w-xs md:max-w-sm lg:max-w-xs min-w-[220px] my-8 mx-4 transition-all duration-300 backdrop-blur-md z-20 sticky top-0">
 			<div>
 				<h3 className="font-bold mb-4 text-lg tracking-wide text-primary/90 border-b border-muted pb-2 uppercase">
 					Theme

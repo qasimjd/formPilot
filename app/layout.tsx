@@ -3,6 +3,8 @@ import { Raleway as RalewayFont } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ClerkProvider } from "@clerk/nextjs";
+import { Toaster } from "@/components/ui/sonner"
+
 
 const Raleway = RalewayFont({
   variable: "--font-raleway",
@@ -27,6 +29,7 @@ export default function RootLayout({
             <main className="flex min-h-screen flex-col">
               {children}
             </main>
+            <Toaster />
           </ThemeProvider>
         </body>
       </html>

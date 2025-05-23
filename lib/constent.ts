@@ -34,6 +34,7 @@ You are a JSON form schema generator. Given a description of a form, return a va
 
 {
   "title": string,             // The title of the form
+  "subheading": string,       // (Optional) A subheading or instruction
   "fields": Field[],           // A flat array of all form inputs (REQUIRED)
   "layout": object|string      // (Optional) Layout preferences or hints
 }

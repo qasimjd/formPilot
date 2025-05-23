@@ -10,6 +10,7 @@ interface Field {
 
 interface FormData {
   title: string;
+  subheading?: string;
   theme: string;
   borderStyle: string;
   formId: string;

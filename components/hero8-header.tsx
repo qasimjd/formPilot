@@ -13,7 +13,7 @@ export const HeroHeader = () => {
   return (
     <header>
       <nav className="bg-background/50 fixed z-20 w-full border-b backdrop-blur-3xl">
-        <div className="mx-auto px-8 transition-all duration-300">
+        <div className="mx-auto px-4 lg:px-8 transition-all duration-300">
           <div className="relative flex items-center justify-between gap-6 py-3 lg:gap-0 lg:py-4">
             <div className="flex w-full items-center justify-between gap-12 lg:w-auto">
               <Link href="/" aria-label="home" className="flex items-center space-x-2">

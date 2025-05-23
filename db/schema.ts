@@ -11,3 +11,12 @@ export const JsonForms = pgTable("jsonForms", {
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
     updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
 });
+
+
+export const FormResponses = pgTable("formResponses", {
+    id: uuid("id").defaultRandom().primaryKey().notNull(),
+    formId: uuid("form_id").references(() => JsonForms.id).notNull(),
+    responseData: text("response_data").notNull(),
+    submittedAt: timestamp('submitted_at', { withTimezone: true }).defaultNow().notNull(),
+    submittedBy: varchar("submitted_by", { length: 255 }).notNull(),
+});

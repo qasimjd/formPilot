@@ -12,6 +12,7 @@ import { getFormById } from "@/db/actions/form.action";
 import EditPageHeader from "@/components/EditPageHeader";
 import { useFormStore } from "@/store/formStore";
 import FormSkeleton from "@/components/FormSkeleton";
+import { HeroHeader } from "@/components/hero8-header";
 
 const EditFormPage = () => {
     const params = useParams();
@@ -98,18 +99,21 @@ const EditFormPage = () => {
     return (
         <>
             {previewMode ? (
-                <>
+                <main >
                     <EditPageHeader />
                     <FormUI parsedFormData={parsedFormData} id={id} />
-                </>
+                </main>
             ) : (
                 <>
-                    <EditPageHeader />
-                    <main className="flex gap-[2%] flex-wrap content-start" >
-                        <div className="relative max-lg:hidden w-1/4 p-4 h-screen">
+                    <HeroHeader />
+                    <main className="flex gap-[2%] flex-wrap content-start mt-16" >
+                        <div className="max-lg:hidden pt-1 h-screen">
                             <EditPageSidebar formId={id} />
                         </div>
-                        <FormUI parsedFormData={parsedFormData} id={id} />
+                        <div className="flex-1 min-w-[320px]">
+                            <EditPageHeader />
+                            <FormUI parsedFormData={parsedFormData} id={id} />
+                        </div>
                     </main>
                 </>
             )}
