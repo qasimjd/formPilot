@@ -25,6 +25,8 @@ export const FormSkeleton: React.FC<FormSkeletonProps> = ({ variant = "form" }) 
       <div className="h-10 bg-muted rounded w-1/2 mb-6" />
       <div className="h-8 bg-muted rounded w-1/3 mb-4" />
       <div className="h-16 bg-muted rounded w-full mb-4" />
+      <div className="h-8 bg-muted rounded w-1/2 mb-4" />
+      <div className="h-16 bg-muted rounded w-full mb-4" />
       <div className="h-8 bg-muted rounded w-2/3 mb-4" />
       <div className="h-16 bg-muted rounded w-full mb-4" />
       <div className="h-8 bg-muted rounded w-1/2 mb-4" />

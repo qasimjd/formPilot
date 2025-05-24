@@ -18,6 +18,8 @@ const FormCardSkeleton = ({ variant = 'formCard' }: FormCardSkeletonProps) => {
           <Skeleton className="h-6 w-3/4 rounded bg-gray-200 dark:bg-gray-800 mb-2" />
         </CardTitle>
         <Skeleton className="h-4 w-1/2 rounded bg-gray-200 dark:bg-gray-800" />
+        {/* Add a skeleton for responses count to match FormCard */}
+        <Skeleton className="h-4 w-1/3 rounded bg-blue-200 dark:bg-blue-900 mt-1" />
       </CardHeader>
       <CardContent className="flex flex-row flex-wrap gap-2 justify-end mt-2 pb-4">
         {variant === 'formCard' ? (
@@ -26,7 +28,10 @@ const FormCardSkeleton = ({ variant = 'formCard' }: FormCardSkeletonProps) => {
             <Skeleton className="h-8 w-16 rounded-lg bg-gray-200 dark:bg-gray-800" />
           </>
         ) : (
-          <Skeleton className="h-8 w-32 rounded-lg bg-gray-200 dark:bg-gray-800" />
+          <>
+            <Skeleton className="h-8 w-32 rounded-lg bg-gray-200 dark:bg-gray-800" />
+            <Skeleton className="h-8 w-32 rounded-lg bg-gray-200 dark:bg-gray-800" />
+          </>
         )}
       </CardContent>
     </Card>

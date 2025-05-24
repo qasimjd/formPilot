@@ -135,7 +135,8 @@ const FormUi = ({ parsedFormData, id }: { parsedFormData: FormData, id: string }
                 body: JSON.stringify({ formId: id, userInput }),
             });
             if (response.ok) {
-                toast.success('Form saved successfully!');
+                toast.success('Form submitted successfully!');
+                setTimeout(() => setUserInput({}), 500);
                 setUserInput({});
             } else {
                 const data = await response.json();

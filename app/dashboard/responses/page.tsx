@@ -4,8 +4,18 @@ import { getUserForms } from '@/db/actions/form.action';
 import Image from 'next/image';
 import React, { Suspense } from 'react'
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0; 
+export const runtime = "edge";
+export const metadata = {
+  title: 'Responses Dashboard',
+  description: 'Manage your forms and responses',
+};
+
+
 const ResponsesContent = async () => {
   const forms = await getUserForms();
+  console.log('Fetched forms:', forms);
 
   return (
     <main className="w-full max-lg:mt-48 px-4 py-8 grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3">
@@ -25,6 +35,7 @@ const ResponsesContent = async () => {
             key={form.id}
             id={form.id}
             title={form.title || 'Untitled Form'}
+            responsesCount={form.responsesCount} 
             createdAt={form.createdAt}
           />
         ))

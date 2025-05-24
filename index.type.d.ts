@@ -16,6 +16,7 @@ interface FormData {
   formId: string;
   formBackground: null | string;
   fields: Field[];
+  responsesCount: number;
 }
 
 interface FormState {

@@ -33,6 +33,7 @@ const DashboardContent = async () => {
             id={form.id}
             title={form.title || 'Untitled Form'}
             createdAt={form.createdAt}
+            responsesCount={form.responsesCount}
             variant="formCard"
           />
         ))

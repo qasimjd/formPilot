@@ -1,7 +1,7 @@
 import { auth } from "@clerk/nextjs/server";
 import { db } from '@/db';
-import { FormResponses } from "../schema";
-import { eq } from "drizzle-orm";
+import { FormResponses, JsonForms } from "../schema";
+import { eq, sql } from "drizzle-orm";
 
 export const saveFormResponse = async (formId: string, response: any) => {
     try {
@@ -11,6 +11,12 @@ export const saveFormResponse = async (formId: string, response: any) => {
             responseData: JSON.stringify(response),
             submittedBy: userId || 'anonymous',
         });
+        await db
+            .update(JsonForms)
+            .set({
+                responsesCount: sql`"responses_count" + 1`,
+            })
+            .where(eq(JsonForms.id, formId));
         return { success: true };
     } catch (error) {
         console.error("Error saving form response:", error);
@@ -32,3 +38,4 @@ export const getFormResponsesById = async (formId: string) => {
         throw new Error("Failed to fetch form responses");
     }
 };
+

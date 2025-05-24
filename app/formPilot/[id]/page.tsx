@@ -12,6 +12,8 @@ import { useFormStore } from "@/store/formStore";
 import FormSkeleton from "@/components/FormSkeleton";
 
 
+
+
 const page = () => {
     const params = useParams();
     const { id } = params as { id: string };
@@ -56,14 +58,9 @@ const page = () => {
 
     if (loading) {
         return (
-            <main className="flex gap-[2%] flex-wrap content-start min-h-[60vh]">
-                <div className="relative max-lg:hidden w-1/4 p-4 h-screen">
-                    <div className="sticky top-1o h-full">
-                        <FormSkeleton variant="sidebar" />
-                    </div>
-                </div>
-                <div className="flex-1 min-w-[320px]">
-                    <FormSkeleton variant="form" />
+            <main className="flex gap-[2%] flex-wrap content-start min-h-[90vh]">
+                <div className="flex-1 max-w-2xl mx-auto mt-4 border-4 border-gray-300 rounded-xl p-4">
+                    <FormSkeleton />
                 </div>
             </main>
         );

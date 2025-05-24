@@ -233,6 +233,7 @@ export const getUserForms = async () => {
                 id: form.id,
                 title,
                 createdAt: form.createdAt,
+                responsesCount: form.responsesCount,
             };
         });
     } catch (error) {
