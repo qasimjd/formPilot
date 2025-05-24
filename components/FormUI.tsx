@@ -173,9 +173,7 @@ const FormUi = ({ parsedFormData, id }: { parsedFormData: FormData, id: string }
                                             className="font-medium flex justify-between items-center"
                                         >
                                             {field.label}
-                                            {field.required && (
-                                                <span className="text-red-500 ml-1">*</span>
-                                            )}
+                                            
                                         </Label>
                                         {pathname.startsWith("/edit-form/") && (
                                             <EditField defaultValue={field} formId={id} onFieldChange={handleFieldChange} />
@@ -184,7 +182,7 @@ const FormUi = ({ parsedFormData, id }: { parsedFormData: FormData, id: string }
                                     {renderField(field, userInput, handleInputChange, handleSelectChange, handleRadioChange)}
                                 </div>
                             ))}
-                            <Button type="submit" className="flex justify-self-end-safe cursor-pointer">Save</Button>
+                            <Button type="submit" className="flex justify-self-end-safe text-white font-semibold cursor-pointer">Save</Button>
                         </form>
                     )}
                 </CardContent>

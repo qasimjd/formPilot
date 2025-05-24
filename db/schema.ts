@@ -1,4 +1,4 @@
-import { timestamp, pgTable, text, uuid, varchar, pgEnum } from "drizzle-orm/pg-core";
+import { timestamp, pgTable, text, uuid, varchar } from "drizzle-orm/pg-core";
 
 
 export const JsonForms = pgTable("jsonForms", {

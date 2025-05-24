@@ -2,7 +2,7 @@
 
 import { auth } from "@clerk/nextjs/server";
 import { db } from '@/db';
-import { JsonForms } from "../schema";
+import { FormResponses, JsonForms } from "../schema";
 import { and, eq, desc } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 
@@ -112,7 +112,7 @@ export const updateFieldInDatabase = async (
 
 
         return {
-            success:true,
+            success: true,
             date: updated[0]
         };
     } catch (error) {
@@ -213,41 +213,42 @@ export const updateFormStyles = async ({ formId, theme, formBackground, borderSt
 };
 
 export const getUserForms = async () => {
-  try {
-    const { userId } = await auth();
-    if (!userId) throw new Error('Unauthorized');
-    const results = await db
-      .select()
-      .from(JsonForms)
-      .where(eq(JsonForms.createdBy, userId))
-      .orderBy(desc(JsonForms.createdAt));
-    // Parse formData for title if possible
-    return results.map((form: any) => {
-      let title = 'Untitled Form';
-      try {
-        const cleaned = form.formData.replace(/```json|```/g, '').trim();
-        const parsed = JSON.parse(cleaned);
-        if (parsed.title) title = parsed.title;
-      } catch {}
-      return {
-        id: form.id,
-        title,
-        createdAt: form.createdAt,
-      };
-    });
-  } catch (error) {
-    return [];
-  }
+    try {
+        const { userId } = await auth();
+        if (!userId) throw new Error('Unauthorized');
+        const results = await db
+            .select()
+            .from(JsonForms)
+            .where(eq(JsonForms.createdBy, userId))
+            .orderBy(desc(JsonForms.createdAt));
+        // Parse formData for title if possible
+        return results.map((form: any) => {
+            let title = 'Untitled Form';
+            try {
+                const cleaned = form.formData.replace(/```json|```/g, '').trim();
+                const parsed = JSON.parse(cleaned);
+                if (parsed.title) title = parsed.title;
+            } catch { }
+            return {
+                id: form.id,
+                title,
+                createdAt: form.createdAt,
+            };
+        });
+    } catch (error) {
+        return [];
+    }
 };
 
 export const deleteFormById = async (id: string) => {
-  try {
-    const { userId } = await auth();
-    if (!userId) throw new Error('Unauthorized');
-    await db.delete(JsonForms).where(and(eq(JsonForms.id, id), eq(JsonForms.createdBy, userId)));
-    revalidatePath(`/dashboard`);
-    return true;
-  } catch (error) {
-    return false;
-  }
+    try {
+        const { userId } = await auth();
+        if (!userId) throw new Error('Unauthorized');
+        await db.delete(JsonForms).where(and(eq(JsonForms.id, id), eq(JsonForms.createdBy, userId)));
+        await db.delete(FormResponses).where(eq(FormResponses.formId, id));
+        revalidatePath(`/dashboard`);
+        return true;
+    } catch (error) {
+        return false;
+    }
 };

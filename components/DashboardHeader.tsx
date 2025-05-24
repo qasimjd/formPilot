@@ -17,21 +17,23 @@ const DashboardHeader = () => {
     }, []);
 
     return (
-        <header className='flex flex-col sm:flex-row items-center justify-between gap-4 px-4 sm:px-6 py-2 sm:py-4 border-b sticky top-0 z-10'>
-            <div>
+        <header className="flex flex-col rounded-2xl shadow-lg mt-4 border border-primary sm:flex-row flex-wrap items-center justify-between gap-4 px-2 sm:px-6 py-2 sm:py-3 border-b sticky top-2 z-10 bg-background/80 backdrop-blur-md">
+            <div className="flex flex-col items-center sm:items-start text-center sm:text-left w-full sm:w-auto">
                 {!isLoaded ? (
                     <Skeleton className="h-8 w-[200px]" />
                 ) : (
-                    <h2 className='text-xl font-semibold'>
+                    <h2 className="text-xl font-semibold break-words max-w-full">
                         {`${greeting}, ${user?.fullName || 'there'}`}
-                        <span className='hidden sm:inline'> 👋</span>
+                        <span className="inline"> 👋</span>
                     </h2>
                 )}
-                <p className='text-sm text-muted-foreground mt-1 hidden sm:block'>
+                <p className="text-sm text-muted-foreground mt-1 hidden sm:block">
                     Manage your projects and tasks
                 </p>
             </div>
-            <CreateForm />
+            <div className="w-full max-lg:hidden sm:w-auto flex justify-center sm:justify-end">
+                <CreateForm />
+            </div>
         </header>
     );
 };

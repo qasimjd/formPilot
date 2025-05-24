@@ -56,6 +56,7 @@ Field: {
 - Always include an "id" field on each Field object.
 - Return only valid JSON. No markdown, code blocks, or comments.
 - Always include at least one item in the "fields" array.
+- If "required" is true, append "*" at the end of the "label" field.
 
 🎯 Example:
 {

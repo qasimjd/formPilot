@@ -37,9 +37,9 @@ const CreateForm = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="default" className="gap-2">
+        <Button variant="default" className="gap-2 cursor-pointer">
           <Sparkle className="h-4 w-4" />
-          <span>Generate Form</span>
+          <span className='hidden lg:block'>Generate Form</span>
         </Button>
       </DialogTrigger>
       <DialogContent className="border border-primary shadow-xl rounded-xl p-6">
@@ -65,11 +65,11 @@ const CreateForm = () => {
                   onClick={handleGenerate}
                   size="sm"
                   variant="default"
-                  className="gap-2"
+                  className="gap-2 cursor-pointer"
                   disabled={loading}
                 >
                   <Sparkle className="h-4 w-4" />
-                  {loading ? 'Generating...' : 'Generate Form'}
+                  {loading ? 'Generating...' : 'Generate'}
                 </Button>
               </div>
             </div>

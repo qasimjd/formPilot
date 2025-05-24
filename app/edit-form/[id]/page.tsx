@@ -1,5 +1,8 @@
 "use client";
 
+
+export const dynamic = "force-dynamic";
+
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { Card, CardContent } from "@/components/ui/card";
@@ -59,13 +62,11 @@ const EditFormPage = () => {
 
     if (loading) {
         return (
-            <main className="flex gap-[2%] flex-wrap content-start min-h-[60vh]">
-                <div className="relative max-lg:hidden w-1/4 p-4 h-screen">
-                    <div className="sticky top-1o h-full">
-                        <FormSkeleton variant="sidebar" />
-                    </div>
+            <main className="w-full px-4 py-12 grid gap-8 grid-cols-1 md:grid-cols-3 min-h-[100vh] place-items-center bg-gradient-to-br from-white via-blue-50 to-blue-100 dark:from-gray-950 dark:via-gray-900 dark:to-blue-950 rounded-xl">
+                <div className="hidden md:block col-span-1 w-full max-w-xs">
+                    <FormSkeleton variant="sidebar" />
                 </div>
-                <div className="flex-1 min-w-[320px]">
+                <div className="col-span-2 w-full max-w-2xl">
                     <FormSkeleton variant="form" />
                 </div>
             </main>
@@ -106,7 +107,7 @@ const EditFormPage = () => {
             ) : (
                 <>
                     <HeroHeader />
-                    <main className="flex gap-[2%] flex-wrap content-start mt-16" >
+                    <main className="relative flex gap-[2%] flex-wrap content-start mt-16" >
                         <div className="max-lg:hidden pt-1 h-screen">
                             <EditPageSidebar formId={id} />
                         </div>

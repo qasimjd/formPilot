@@ -9,13 +9,17 @@ import { toast } from "sonner";
 
 const DeleteFormButton = ({ formId }: { formId: string }) => {
     const [open, setOpen] = useState(false);
+    const [loading, setLoading] = useState(false);
+
     const handleDelete = async () => {
         try {
+            setLoading(true);
             await deleteFormById(formId);
             toast.success("Form deleted successfully");
         } catch (error) {
             toast.error("Failed to delete form");
         }
+        setLoading(false);
         setOpen(false);
     };
     return (
@@ -43,11 +47,11 @@ const DeleteFormButton = ({ formId }: { formId: string }) => {
                         Are you sure you want to delete this form? This action cannot be undone.
                     </div>
                     <DialogFooter className="flex flex-row gap-2 justify-end mt-4">
-                        <Button variant="outline" onClick={() => setOpen(false)} className="rounded-lg px-4 py-2 cursor-pointer">
+                        <Button variant="outline" onClick={() => setOpen(false)} disabled={loading} className="rounded-lg px-4 py-2 cursor-pointer">
                             Cancel
                         </Button>
-                        <Button variant="destructive" onClick={handleDelete} className="rounded-lg px-4 py-2 cursor-pointer">
-                            Yes, Delete
+                        <Button variant="destructive" onClick={handleDelete} disabled={loading} className="rounded-lg px-4 py-2 cursor-pointer">
+                            {loading ? "Deleting..." : "Yes, Delete"}
                         </Button>
                     </DialogFooter>
                 </DialogContent>
