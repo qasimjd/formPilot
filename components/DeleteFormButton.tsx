@@ -18,6 +18,7 @@ const DeleteFormButton = ({ formId }: { formId: string }) => {
             toast.success("Form deleted successfully");
         } catch (error) {
             toast.error("Failed to delete form");
+            console.log(error)
         }
         setLoading(false);
         setOpen(false);

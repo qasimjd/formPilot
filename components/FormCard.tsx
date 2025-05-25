@@ -7,15 +7,8 @@ import ShareButton from './shareButton';
 import DeleteFormButton from './DeleteFormButton';
 import ExportToExcelButton from './ExportToExcelButton';
 
-interface FormCardProps {
-    id: string;
-    title: string;
-    createdAt: string;
-    variant?: 'formCard' | 'responseCard';
-    responsesCount?: number;
-}
 
-const FormCard = React.memo(({ id, title, createdAt, variant, responsesCount }: FormCardProps) => {
+const FormCard = React.memo(function FormCard({ id, title, createdAt, variant, responsesCount }: FormCardProps) {
 
     return (
         <Card

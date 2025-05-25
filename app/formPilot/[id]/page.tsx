@@ -12,12 +12,10 @@ import { useFormStore } from "@/store/formStore";
 import FormSkeleton from "@/components/FormSkeleton";
 
 
-
-
-const page = () => {
+const Page = () => {
     const params = useParams();
     const { id } = params as { id: string };
-    const [parsedFormData, setParsedFormData] = useState<any>(null);
+    const [parsedFormData, setParsedFormData] = useState<FormDefinition | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
 
@@ -44,17 +42,17 @@ const page = () => {
                         throw new Error("Invalid form fields");
                     }
                     setParsedFormData(parsed);
-                } catch (e) {
+                } catch {
                     setError("Invalid form data. Please try again.");
                 }
-            } catch (e) {
+            } catch {
                 setError("Failed to fetch form data.");
             } finally {
                 setLoading(false);
             }
         };
         if (id) fetchForm();
-    }, [id]);
+    }, [id, setTheme, setFormBackground, setBorderStyle]);
 
     if (loading) {
         return (
@@ -92,9 +90,10 @@ const page = () => {
 
     return (
         <>
-            <FormUI parsedFormData={parsedFormData} id={id} />
+            {parsedFormData && <FormUI parsedFormData={parsedFormData} id={id} />}
+
         </>
     );
 };
 
-export default page;
+export default Page;

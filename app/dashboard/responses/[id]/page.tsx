@@ -3,20 +3,21 @@ import { format } from 'date-fns';
 import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import { ArrowLeft } from 'lucide-react';
 
-interface Props {
-  params: { id: string };
-}
 
-const ResponsesPage = async ({ params }: Props) => {
-  const responses = await getFormResponsesById(params.id);
+const ResponsesPage = async ({ params }: { params: Promise<{ id: string }> }) => {
+ 
+  const {id} = await(params)
+
+  const responses = await getFormResponsesById(id);
 
   return (
     <main className="max-w-2xl mx-auto p-4 h-full">
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-2xl font-bold">Responses</h1>
         <Button asChild variant="outline">
-          <Link href="/dashboard/responses">Back to Dashboard</Link>
+          <Link href="/dashboard/responses"><ArrowLeft/>Back</Link>
         </Button>
       </div>
       {responses.length === 0 ? (

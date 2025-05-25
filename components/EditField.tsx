@@ -19,7 +19,6 @@ interface FieldType {
     type: string;
     placeholder?: string;
     required?: boolean;
-    [key: string]: any;
 }
 
 interface EditFieldProps {

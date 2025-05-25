@@ -15,7 +15,7 @@ export default function Page() {
                             </h2>
 
                             <p className="mt-4 text-gray-300">
-                                FormPilot makes form creation effortless. Whether you're building surveys, contact forms, or signups — AI handles the heavy lifting.
+                                {"FormPilot makes form creation effortless. Whether you're building surveys, contact forms, or signups — AI handles the heavy lifting."}
                             </p>
                         </div>
                     </div>

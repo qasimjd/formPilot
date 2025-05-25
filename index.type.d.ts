@@ -8,7 +8,7 @@ interface Field {
   options?: string[];
 }
 
-interface FormData {
+interface FormDefinition {
   title: string;
   subheading?: string;
   theme: string;
@@ -34,4 +34,13 @@ interface FormState {
   setFormBackground: (formBackground: string) => void;
   setBorderStyle: (borderStyle: string) => void;
 }
+
+interface FormCardProps {
+    id: string;
+    title: string;
+    createdAt: string;
+    variant?: 'formCard' | 'responseCard';
+    responsesCount?: number;
+}
+
 

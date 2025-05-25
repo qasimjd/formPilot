@@ -25,7 +25,7 @@ const ResponsesContent = async () => {
           <h2 className="text-xl sm:text-2xl font-semibold text-gray-700 dark:text-gray-200 mt-2">No Forms Yet</h2>
           <p className="text-gray-500 dark:text-gray-400 text-sm max-w-xs text-center">
             {`You haven't created any forms yet. Click `}
-            <span className="font-semibold text-primary">"Generate Form"</span>
+            <span className="font-semibold text-primary">&quot;Generate Form&quot;</span>
             {` to get started!`}
           </p>
         </div>
