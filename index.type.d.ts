@@ -7,7 +7,6 @@ interface Field {
   required?: boolean;
   options?: string[];
 }
-
 interface FormDefinition {
   title: string;
   subheading?: string;
@@ -18,7 +17,6 @@ interface FormDefinition {
   fields: Field[];
   responsesCount: number;
 }
-
 interface FormState {
   title: string;
   formId: string;
@@ -34,13 +32,21 @@ interface FormState {
   setFormBackground: (formBackground: string) => void;
   setBorderStyle: (borderStyle: string) => void;
 }
-
 interface FormCardProps {
-    id: string;
-    title: string;
-    createdAt: string;
-    variant?: 'formCard' | 'responseCard';
-    responsesCount?: number;
+  id: string;
+  title: string;
+  createdAt: string;
+  variant?: 'formCard' | 'responseCard';
+  responsesCount?: number;
 }
-
-
+interface StatItem {
+  label: string;
+  value: string | number;
+  icon: string;
+  color: string;
+}
+interface ChartDataItem {
+  name: string; // Day of week
+  forms: number;
+  responses: number;
+}

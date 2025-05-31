@@ -39,7 +39,7 @@ const CreateForm = () => {
       <DialogTrigger asChild>
         <Button variant="default" className="gap-2 cursor-pointer">
           <Sparkle className="h-4 w-4" />
-          <span className='hidden lg:block'>Generate Form</span>
+          <span className='hidden sm:block'>Generate Form</span>
         </Button>
       </DialogTrigger>
       <DialogContent className="border border-primary shadow-xl rounded-xl p-6">

@@ -16,7 +16,7 @@ import {
 
 function ChartClient({ chartData, chartConfig, iconMap }: any) {
   return (
-    <ChartContainer config={chartConfig} className="h-72 w-full">
+    <ChartContainer config={chartConfig} className="h-64 w-full">
       <LineChart data={chartData} width={600} height={300} style={{ width: '100%', height: '100%' }}>
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="name" />

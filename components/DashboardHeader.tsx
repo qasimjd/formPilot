@@ -22,7 +22,7 @@ const DashboardHeader = () => {
                 {!isLoaded ? (
                     <Skeleton className="h-8 w-[200px]" />
                 ) : (
-                    <h2 className="text-xl font-semibold break-words max-w-full">
+                    <h2 className="sm:text-xl font-semibold break-words max-w-full">
                         {`${greeting}, ${user?.fullName || 'there'}`}
                         <span className="inline"> 👋</span>
                     </h2>
@@ -31,7 +31,7 @@ const DashboardHeader = () => {
                     Manage your projects and tasks
                 </p>
             </div>
-            <div className="w-full max-lg:hidden sm:w-auto flex justify-center sm:justify-end">
+            <div className="w-full max-sm:hidden sm:w-auto flex justify-center sm:justify-end">
                 <CreateForm />
             </div>
         </header>

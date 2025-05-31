@@ -17,11 +17,11 @@ const ResponsesContent = async () => {
   const responses = await getUserForms();
 
   return (
-    <main className="w-full p-2 md:p-8 max-w-6xl mx-auto">
+    <main className="w-full p-4 mt-4 md:p-8 max-w-6xl mx-auto">
       <h1 className="text-2xl md:text-3xl font-bold mb-1 tracking-tight flex items-center gap-2">
         All Responses
       </h1>
-      <p className="text-muted-foreground mb-8 text-base md:text-lg">
+      <p className="text-muted-foreground mb-4 lg:mb-8 text-base md:text-lg">
         View and manage all your form responses in one place. Track engagement and analyze your data below.
       </p>
       <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3">
@@ -53,7 +53,7 @@ export default function DashboardPage() {
   return (
     <Suspense
       fallback={
-        <main className="w-full p-2 md:p-8 max-w-6xl mx-auto">
+        <main className="w-full p-4 mt-4 md:p-8 max-w-6xl mx-auto">
           <h1 className="text-2xl md:text-3xl font-bold mb-1 tracking-tight flex items-center gap-2">
             All Responses
           </h1>
