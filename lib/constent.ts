@@ -1,31 +1,31 @@
 import { ChartSplineIcon, HardDriveIcon, MessageCircleReplyIcon, ShieldPlusIcon } from "lucide-react";
 
 export const menuList = [
-    {
-        id: 1,
-        name: "My Forms",
-        icon: HardDriveIcon,
-        path: "/dashboard",
-    },
+  {
+    id: 1,
+    name: "My Forms",
+    icon: HardDriveIcon,
+    path: "/dashboard",
+  },
 
-    {
-        id: 2,
-        name: "Responses",
-        icon: MessageCircleReplyIcon,
-        path: "/dashboard/responses",
-    },
-    {
-        id: 3,
-        name: "Analytics",
-        icon: ChartSplineIcon,
-        path: "/dashboard/analytics",
-    },
-    {
-        id: 4,
-        name: "Upgrade",
-        icon: ShieldPlusIcon,
-        path: "/dashboard/upgrade",
-    },
+  {
+    id: 2,
+    name: "Responses",
+    icon: MessageCircleReplyIcon,
+    path: "/dashboard/responses",
+  },
+  {
+    id: 3,
+    name: "Analytics",
+    icon: ChartSplineIcon,
+    path: "/dashboard/analytics",
+  },
+  {
+    id: 4,
+    name: "Upgrade",
+    icon: ShieldPlusIcon,
+    path: "/dashboard/upgrade",
+  },
 
 ]
 
@@ -136,3 +136,20 @@ export const borders = [
   { label: "Bottom Highlight", value: "border-b-6 border-b-yellow-400 hover:border-b-yellow-600 transition-colors", previewBg: "bg-white" },
   { label: "None", value: "border-0", previewBg: "bg-white" },
 ];
+
+export const Plans = [
+  {
+    link: "https://buy.stripe.com/test_aFa5kFcach0W3R6asv0sU01",
+    name: "Pro Yearly",
+    price: "$99.99",
+    priceId: "prod_SNPQwYDZ887aDP",
+    description: "Upgrade to Pro for unlimited forms and responses. Yearly subscription.",
+  },
+  {
+    link: "https://buy.stripe.com/test_6oUfZjb687qmcnC8kn0sU00",
+    name: "Pro Monthly",
+    price: "$9.99",
+    priceId: "prod_SNPPEHxU4syzyf",
+    description: "Upgrade to Pro for unlimited forms and responses. Monthly subscription.",
+  }
+]

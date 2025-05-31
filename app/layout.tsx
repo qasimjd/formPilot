@@ -25,7 +25,12 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
         <body className={`${Raleway.variable} antialiased font-Raleway`}>
-          <ThemeProvider defaultTheme="light">
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="light"
+            enableSystem
+            disableTransitionOnChange
+          >
             <main className="flex min-h-screen flex-col">
               {children}
             </main>

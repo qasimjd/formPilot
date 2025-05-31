@@ -33,9 +33,8 @@ export default function EditFormSidebar({ formId }: { formId: string }) {
 	};
 
 	return (
-		<aside className="z-30 sticky top-4 border border-primary rounded-2xl p-4 space-y-8 bg-background shadow-2xl  w-fit max-w-xs md:max-w-sm lg:max-w-xs min-w-[220px] m-3 transition-all duration-300 backdrop-blur-md">
-			<div>
-				<h3 className="font-bold mb-4 text-lg tracking-wide text-primary/90 border-b border-muted pb-2 uppercase">
+		<aside className="sticky top-1 left-0 z-20 h-[calc(100vh-2rem)] m-4 flex flex-col justify-between rounded-2xl border border-primary bg-background p-4 shadow-2xl backdrop-blur-md transition-all duration-300 max-sm:px-2 sm:p-4 lg:min-w-72 space-y-8">			<div>
+				<h3 className="font-bold mb-2 text-lg tracking-wide text-primary/90 border-b border-muted pb-2 uppercase">
 					Theme
 				</h3>
 				<RadioGroup
@@ -44,7 +43,7 @@ export default function EditFormSidebar({ formId }: { formId: string }) {
 						setTheme(val);
 						handleUpdate("theme", val);
 					}}
-					className="flex flex-wrap gap-3"
+					className="flex flex-wrap gap-2"
 				>
 					{themes.map((t) => (
 						<label
@@ -62,10 +61,10 @@ export default function EditFormSidebar({ formId }: { formId: string }) {
 				</RadioGroup>
 			</div>
 			<div>
-				<h3 className="font-bold mb-4 text-lg tracking-wide text-primary/90 border-b border-muted pb-2 uppercase">
+				<h3 className="font-bold mb-2 text-lg tracking-wide text-primary/90 border-b border-muted pb-2 uppercase">
 					Background
 				</h3>
-				<div className="max-h-52 overflow-y-auto pr-1 custom-scrollbar">
+				<div className="max-h-48 overflow-y-auto pr-1 custom-scrollbar">
 					<RadioGroup
 						value={formBackground}
 						onValueChange={(val) => {
@@ -98,7 +97,7 @@ export default function EditFormSidebar({ formId }: { formId: string }) {
 				</div>
 			</div>
 			<div>
-				<h3 className="font-bold mb-4 text-lg tracking-wide text-primary/90 border-b border-muted pb-2 uppercase">
+				<h3 className="font-bold mb-2 text-lg tracking-wide text-primary/90 border-b border-muted pb-2 uppercase">
 					Border
 				</h3>
 				<div className="max-h-48 overflow-y-auto pr-1 custom-scrollbar">

@@ -10,7 +10,7 @@ export default function EditPageHeader() {
     const { previewMode, setPreviewMode, title, formId } = useFormStore();
 
     return (
-        <header className={`w-full ${previewMode ? 'max-w-4xl' : ''} min-w-[220px] my-4 mx-auto border border-primary rounded-2xl bg-background/70 shadow-lg backdrop-blur-lg z-30 sticky top-0 px-6 py-2 flex flex-col`}>
+        <header className={`w-full ${previewMode ? 'max-w-4xl' : ''} min-w-[220px] my-4 mx-auto border border-primary rounded-2xl bg-background/70 shadow-lg backdrop-blur-lg z-30 sticky top-1 px-6 py-2 flex flex-col`}>
             <div className="flex items-center justify-between w-full">
                 {/* Branding (left) */}
                 <div className="flex items-center gap-3">

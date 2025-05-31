@@ -7,50 +7,69 @@ import Link from 'next/link';
 import { Progress } from "@/components/ui/progress"
 import Image from 'next/image';
 import CreateForm from './createForm';
+import { getUserForms } from '@/db/actions/form.action';
+import { useEffect, useState } from 'react';
 
 const Sidebar = () => {
   const pathname = usePathname();
+  const [formCount, setFormCount] = useState<number>(0);
+
+  useEffect(() => {
+    const fetchFormCount = async () => {
+      const forms = await getUserForms();
+      setFormCount(forms.length);
+    };
+    fetchFormCount();
+  }, []);
 
   return (
-    <aside className="sticky top-4 border border-primary rounded-2xl lg:p-4 space-y-8 bg-background shadow-2xl lg:min-w-72 max-sm:p-2 sm:p-4 transition-all duration-300 backdrop-blur-md z-20 h-full flex flex-col overflow-y-auto">
+    <aside className="sticky top-4 left-0 z-20 h-[calc(100vh-2rem)] flex flex-col justify-between rounded-2xl border border-primary bg-background py-4 shadow-2xl backdrop-blur-md transition-all duration-300 max-sm:px-2 sm:p-4 lg:min-w-72 space-y-8">
+      {/* Logo */}
       <div>
-        <Link href="/" aria-label="home" className="flex items-center space-x-2 mb-10 sm:mb-14">
+        <Link href="/" aria-label="Home" className="flex items-center gap-2 mb-12">
           <Image src="/logo.svg" alt="Logo" width={42} height={42} className="h-8 w-8" />
-          <h2 className="hidden sm:hidden lg:inline-block font-bold text-xl">FormPilot</h2>
+          <h2 className="hidden lg:inline-block font-bold text-xl text-primary">FormPilot</h2>
         </Link>
-        <nav className="space-y-2 sm:space-y-4">
+
+        {/* Navigation Menu */}
+        <nav className="space-y-2">
           {menuList.map((item) => {
             const isActive = pathname === item.path;
             return (
               <Link
-                href={item.path}
                 key={item.id}
+                href={item.path}
                 className={cn(
-                  'flex items-center gap-2 sm:gap-3 px-2 sm:px-3 py-2 rounded-lg cursor-pointer font-semibold transition-all border border-transparent hover:border-primary/40 hover:bg-primary/5',
-                  isActive && 'border-primary bg-primary/10 shadow text-primary'
+                  "flex items-center gap-3 px-3 py-2 rounded-lg font-medium transition-all border border-transparent",
+                  "hover:border-primary/40 hover:bg-primary/5",
+                  isActive && "bg-primary/10 border-primary text-primary shadow"
                 )}
               >
-                <item.icon className="size-6" />
-                <span className='hidden lg:inline-block'>{item.name}</span>
+                <item.icon className="size-5 sm:size-6" />
+                <span className="hidden lg:inline-block">{item.name}</span>
               </Link>
             );
           })}
         </nav>
       </div>
-      <div className='lg:hidden flex flex-col items-center justify-center'>
+
+      {/* Mobile Create Button */}
+      <div className="lg:hidden flex items-center justify-center pt-4">
         <CreateForm />
       </div>
 
-      <div className="mt-auto space-y-2 sm:space-y-4 hidden lg:block">
-        <div className="my-2 sm:my-4">
-          <Progress value={33} />
-        </div>
-        <p className="text-xs sm:text-sm"><strong>2</strong> out of <strong>3</strong> Form Created</p>
-        <p className="text-xs sm:text-sm mt-1 text-muted-foreground">
-          Upgrade to <strong className="text-primary mx-1">Pro</strong> to create unlimited forms
+      {/* Progress + Upgrade Prompt (Visible on Desktop) */}
+      <div className="hidden lg:block space-y-3 mt-auto">
+        <Progress value={Math.min((formCount / 3) * 100, 100)} />
+        <p className="text-sm">
+          <strong>{formCount}</strong> out of <strong>3</strong> Forms Created
+        </p>
+        <p className="text-xs text-muted-foreground">
+          Upgrade to <span className="font-semibold text-primary">Pro</span> to unlock unlimited forms.
         </p>
       </div>
     </aside>
+
   );
 };
 

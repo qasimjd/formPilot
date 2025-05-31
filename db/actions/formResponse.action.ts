@@ -3,20 +3,28 @@ import { db } from '@/db';
 import { FormResponses, JsonForms } from "../schema";
 import { eq, sql } from "drizzle-orm";
 
-export const saveFormResponse = async (formId: string, response: any) => {
+interface FormAnswer {
+    [fieldId: string]: string | number | boolean | null;
+}
+
+export const saveFormResponse = async (formId: string, response: FormAnswer) => {
     try {
         const { userId } = await auth();
-        await db.insert(FormResponses).values({
+        const insertResult = await db.insert(FormResponses).values({
             formId,
             responseData: JSON.stringify(response),
-            submittedBy: userId || 'anonymous',
-        });
-        await db
-            .update(JsonForms)
-            .set({
-                responsesCount: sql`"responses_count" + 1`,
-            })
-            .where(eq(JsonForms.id, formId));
+            submittedBy: userId ?? "anonymous",
+        }).returning();
+
+        if (insertResult.length > 0) {
+            await db
+                .update(JsonForms)
+                .set({
+                    responsesCount: sql`"responses_count" + 1`,
+                })
+                .where(eq(JsonForms.id, formId));
+        }
+
         return { success: true };
     } catch (error) {
         console.error("Error saving form response:", error);

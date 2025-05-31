@@ -32,6 +32,7 @@ export const FormSkeleton: React.FC<FormSkeletonProps> = ({ variant = "form" }) 
       <div className="h-8 bg-muted rounded w-1/2 mb-4" />
       <div className="h-16 bg-muted rounded w-full mb-4" />
       <div className="h-8 bg-muted rounded w-1/3 mb-4" />
+      <div className="h-8 bg-muted rounded w-14 mb-4 flex justify-self-end mr-2" />
     </div>
   );
 };

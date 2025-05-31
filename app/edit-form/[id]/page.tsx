@@ -68,17 +68,17 @@ const EditFormPage = () => {
   }, [id, setFormId, setTheme, setFormBackground, setBorderStyle]);
 
   if (loading) {
-    return (
-      <main className="w-full px-4 py-12 grid gap-8 grid-cols-1 md:grid-cols-3 min-h-[100vh] place-items-center bg-gradient-to-br from-white via-blue-50 to-blue-100 dark:from-gray-950 dark:via-gray-900 dark:to-blue-950 rounded-xl">
-        <div className="hidden md:block col-span-1 w-full max-w-xs">
-          <FormSkeleton variant="sidebar" />
-        </div>
-        <div className="col-span-2 w-full max-w-2xl">
-          <FormSkeleton variant="form" />
-        </div>
-      </main>
-    );
-  }
+  return (
+    <main className="relative flex gap-2 flex-wrap content-start mt-16 min-h-[100vh] px-4 py-12 bg-gradient-to-br from-white via-blue-50 to-blue-100 dark:from-gray-950 dark:via-gray-900 dark:to-blue-950 rounded-xl">
+      <div className="max-lg:hidden pt-1 h-screen border-4 border-gray-200 rounded-xl p-4 max-w-xs w-full">
+        <FormSkeleton variant="sidebar" />
+      </div>
+      <div className="flex-1 min-w-[320px] border-4 border-gray-200 rounded-xl p-4 mx-auto w-full">
+        <FormSkeleton variant="form" />
+      </div>
+    </main>
+  );
+}
 
   if (error) {
     return (
@@ -114,10 +114,8 @@ const EditFormPage = () => {
       ) : (
         <>
           <HeroHeader />
-          <main className="relative flex gap-[2%] flex-wrap content-start mt-16">
-            <div className="max-lg:hidden pt-1 h-screen">
+          <main className="relative flex flex-wrap content-start mt-16">
               <EditPageSidebar formId={id} />
-            </div>
             <div className="flex-1 min-w-[320px]">
               <EditPageHeader />
               {parsedFormData && <FormUI parsedFormData={parsedFormData} id={id} />}

@@ -6,6 +6,16 @@ import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0; 
+export const runtime = "edge";
+export const metadata = {
+  title: 'Form Responses',
+  description: 'View and manage responses for your forms',
+};
+
+
+
 const ResponsesPage = async ({ params }: { params: Promise<{ id: string }> }) => {
  
   const {id} = await(params)

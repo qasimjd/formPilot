@@ -56,8 +56,8 @@ const Page = () => {
 
     if (loading) {
         return (
-            <main className="flex gap-[2%] flex-wrap content-start min-h-[90vh]">
-                <div className="flex-1 max-w-2xl mx-auto mt-4 border-4 border-gray-300 rounded-xl p-4">
+            <main className="flex gap-[2%] flex-wrap content-start min-h-[100vh]">
+                <div className="flex-1 max-w-2xl mx-auto mt-4 border-4 border-gray-200 rounded-xl p-4">
                     <FormSkeleton />
                 </div>
             </main>
