@@ -17,7 +17,7 @@ const DashboardHeader = () => {
     }, []);
 
     return (
-        <header className="flex flex-col rounded-2xl shadow-lg border border-primary sm:flex-row flex-wrap items-center justify-between gap-4 px-2 sm:px-6 py-2 sm:py-2 border-b sticky top-4 z-10 bg-background/80 backdrop-blur-md">
+        <header className="flex flex-col rounded-2xl shadow-lg lg:border lg:border-primary sm:flex-row flex-wrap items-center justify-between gap-4 px-2 sm:px-6 py-2 sm:py-2 border-b sticky lg:top-4 top-1 z-10 bg-background/80 backdrop-blur-md">
             <div className="flex flex-col items-center sm:items-start text-center sm:text-left w-full sm:w-auto">
                 {!isLoaded ? (
                     <Skeleton className="h-8 w-[200px]" />

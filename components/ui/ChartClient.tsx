@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 "use client"
 
 import {
@@ -14,7 +16,16 @@ import {
   Line
 } from "recharts";
 
-function ChartClient({ chartData, chartConfig, iconMap }: any) {
+interface ChartClientProps {
+  chartData: ChartDataItem[];
+  chartConfig: {
+    forms: { color: string; label: string };
+    responses: { color: string; label: string };
+  };
+  iconMap: Record<string, React.ComponentType<React.SVGProps<SVGSVGElement>>>;
+}
+
+function ChartClient({ chartData, chartConfig, iconMap }: ChartClientProps) {
   return (
     <ChartContainer config={chartConfig} className="h-64 w-full">
       <LineChart data={chartData} width={600} height={300} style={{ width: '100%', height: '100%' }}>

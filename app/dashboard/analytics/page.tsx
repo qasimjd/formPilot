@@ -59,7 +59,7 @@ const AnalyticsPage = () => {
 	}, [])
 
 	return (
-		<main className="w-full p-4 mt-4 md:p-8 max-w-6xl mx-auto">
+		<main className="w-full p-4 max-md:mt-4 md:p-8 max-w-6xl mx-auto">
 			<h1 className="text-2xl md:text-3xl font-bold mb-2">Analytics Overview</h1>
 			<p className="text-muted-foreground mb-4 lg:mb-8">Get insights into your forms and user engagement.</p>
 

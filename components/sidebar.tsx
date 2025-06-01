@@ -27,7 +27,7 @@ const Sidebar = () => {
   }, []);
 
   return (
-    <aside className="sticky top-4 left-0 z-20 h-[calc(100vh-2rem)] flex flex-col justify-between rounded-2xl border border-primary bg-background py-4 shadow-2xl backdrop-blur-md transition-all duration-300 max-lg:px-2 lg:p-4 lg:min-w-72 space-y-8">
+    <aside className="sticky top-4 left-0 z-20 h-[calc(100vh-2rem)] flex flex-col justify-between lg:rounded-2xl lg:border lg:border-primary bg-background md:py-4 shadow-2xl backdrop-blur-md transition-all duration-300 max-lg:px-2 lg:p-4 lg:min-w-72 space-y-8">
       {/* Logo */}
       <div>
         <Link href="/" aria-label="Home" className="flex items-center gap-2 mb-12">
