@@ -1,36 +1,55 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# FormPilot
+
+FormPilot is an AI-powered form builder that lets you create, manage, and analyze forms in seconds. Describe your form, and our AI generates a ready-to-use form instantly. Perfect for surveys, contact forms, signups, and more.
+
+## Features
+- **AI Form Generation:** Describe your form and let AI build it for you.
+- **Instant Previews:** See your form as you build it.
+- **Real-time Editing:** Edit fields, themes, and layouts on the fly.
+- **Response Management:** View and manage all form responses in one dashboard.
+- **Analytics:** Track form performance and engagement with live charts.
+- **Export to Excel:** Download responses for offline analysis.
+- **User Authentication:** Secure sign-in and user management with Clerk.
+- **Modern UI:** Responsive, accessible, and beautiful design with Tailwind CSS and Radix UI.
+- **Upgrade Plans:** Unlock premium features with a Pro plan.
+
+## Tech Stack
+- **Framework:** [Next.js 15](https://nextjs.org/) (App Router, Server Actions)
+- **Database:** [Neon](https://neon.tech/) (Postgres, Drizzle ORM)
+- **AI:** [Google Gemini](https://ai.google.dev/) for form schema generation
+- **Authentication:** [Clerk](https://clerk.com/)
+- **UI:** [Tailwind CSS](https://tailwindcss.com/), [Radix UI](https://www.radix-ui.com/), [Lucide Icons](https://lucide.dev/)
+- **State Management:** [Zustand](https://zustand-demo.pmnd.rs/)
+- **Charts:** [Recharts](https://recharts.org/)
+- **Other:** Stripe (payments), Sonner (toasts), Excel export, Framer Motion
 
 ## Getting Started
 
-First, run the development server:
+1. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+2. **Set up environment variables:**
+   - Copy `.env.example` to `.env.local` and fill in required values (database, Clerk, Gemini, Stripe, etc).
+3. **Run the development server:**
+   ```bash
+   npm run dev
+   ```
+   Open [http://localhost:3000](http://localhost:3000) to view the app.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Folder Structure
+- `app/` — Next.js app directory (routing, pages, API)
+- `components/` — Reusable UI and logic components
+- `db/` — Database schema and actions (Drizzle ORM)
+- `lib/` — Utility functions, constants, AI integration
+- `public/` — Static assets (images, logo)
+- `store/` — Zustand state management
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Deployment
+Deploy easily on [Vercel](https://vercel.com/) or your preferred platform.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## License
+MIT
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+FormPilot — From Idea to Form in One Click.
