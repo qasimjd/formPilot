@@ -85,49 +85,33 @@ Field: {
 export const themes = [
   { label: "Light", value: "light" },
   { label: "Dark", value: "dark" },
-  { label: "Slate", value: "bg-slate-900 text-white" },
+  { label: "Pastel", value: "bg-pink-50 text-gray-700" },
+  { label: "Frosted", value: "bg-white/80 backdrop-blur text-gray-800" },
 ];
 
 export const backgrounds = [
-  {
-    label: "Gradient Pink",
-    value: "bg-gradient-to-r from-pink-200 via-purple-200 to-indigo-200",
-  },
-  {
-    label: "Gradient Blue",
-    value: "bg-gradient-to-r from-blue-200 via-green-200 to-teal-200",
-  },
-  {
-    label: "Gradient Orange",
-    value: "bg-gradient-to-r from-orange-200 via-yellow-200 to-amber-200",
-  },
-  {
-    label: "Gradient Rose",
-    value: "bg-gradient-to-r from-rose-200 via-rose-300 to-pink-300",
-  },
-  {
-    label: "Gradient Emerald",
-    value: "bg-gradient-to-br from-emerald-200 to-green-300",
-  },
-  {
-    label: "Gradient Sky",
-    value: "bg-gradient-to-r from-sky-200 via-blue-300 to-indigo-300",
-  },
-  {
-    label: "Sunset",
-    value: "bg-gradient-to-r from-yellow-300 via-red-300 to-pink-400",
-  },
+  { label: "Gradient Pink", value: "bg-gradient-to-r from-pink-200 via-purple-200 to-indigo-200" },
+  { label: "Gradient Blue", value: "bg-gradient-to-r from-blue-200 via-green-200 to-teal-200" },
+  { label: "Gradient Orange", value: "bg-gradient-to-r from-orange-200 via-yellow-200 to-amber-200" },
+  { label: "Gradient Rose", value: "bg-gradient-to-r from-rose-200 via-rose-300 to-pink-300" },
+  { label: "Gradient Emerald", value: "bg-gradient-to-br from-emerald-200 to-green-300" },
+  { label: "Gradient Sky", value: "bg-gradient-to-r from-sky-200 via-blue-300 to-indigo-300" },
+  { label: "Sunset", value: "bg-gradient-to-r from-yellow-300 via-red-300 to-pink-400" },
+  { label: "Aurora", value: "bg-gradient-to-br from-green-300 via-blue-400 to-purple-500" },
+  { label: "Lavender Dream", value: "bg-gradient-to-br from-purple-200 via-pink-200 to-yellow-100" },
+  { label: "Ocean Wave", value: "bg-gradient-to-r from-cyan-100 via-blue-200 to-indigo-100" },
+  { label: "Soft Gray", value: "bg-gray-100" },
   { label: "Amber", value: "bg-amber-400" },
   { label: "Light", value: "bg-white" },
   { label: "Dark", value: "bg-black" },
 ];
 
 export const borders = [
+  { label: "Double Slate", value: "border-double border-4 border-slate-500", previewBg: "bg-white" },
   { label: "Accent Right", value: "border-r-6 border-r-black", previewBg: "bg-white" },
   { label: "Groove Border", value: "border-4 border-gray-400 border-groove", previewBg: "bg-white" },
   { label: "Thick Blue", value: "border-4 border-blue-400", previewBg: "bg-white" },
   { label: "Dashed Amber", value: "border-2 border-amber-400 border-dashed", previewBg: "bg-white" },
-  { label: "Double Slate", value: "border-double border-4 border-slate-500", previewBg: "bg-white" },
   { label: "Rounded Shadow", value: "border border-gray-300 rounded-xl shadow-lg", previewBg: "bg-white" },
   { label: "Right Medium", value: "border-r-2 border-indigo-400", previewBg: "bg-white" },
   { label: "Left Medium", value: "border-l-2 border-emerald-400", previewBg: "bg-white" },

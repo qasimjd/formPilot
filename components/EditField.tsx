@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { deleteFieldFromDatabase, updateFieldInDatabase } from "@/db/actions/form.action";
+import { toast } from "sonner";
 
 interface FieldType {
     id: string;
@@ -51,10 +52,16 @@ const EditField = ({ defaultValue, formId, onFieldChange }: EditFieldProps) => {
             const res = await updateFieldInDatabase(updatedField, formId);
             if (res.success && onFieldChange) {
                 onFieldChange();
+                toast.success("Field updated successfully");
             }
             setIsEditOpen(false);
         } catch (err) {
             console.error("Failed to update field:", err);
+            toast.error(
+                err instanceof Error
+                    ? `Failed to update field: ${err.message}`
+                    : "Failed to update field"
+            );
         } finally {
             setIsSaving(false);
         }
@@ -81,7 +88,7 @@ const EditField = ({ defaultValue, formId, onFieldChange }: EditFieldProps) => {
                     <Edit2 className="size-4 text-primary cursor-pointer" />
                 </PopoverTrigger>
                 <PopoverContent className="w-80 space-y-4 shadow-lg">
-                    <form onSubmit={handleEdit} className="space-y-4">
+                    <form className="space-y-4">
                         <div className="space-y-2">
                             <Label htmlFor="label">Label</Label>
                             <Input
@@ -102,8 +109,9 @@ const EditField = ({ defaultValue, formId, onFieldChange }: EditFieldProps) => {
                         </div>
 
                         <div className="flex justify-end">
-                            <Button size="sm" type="submit" className="cursor-pointer"
-                                disabled={isSaving}>
+                            <Button size="sm" type="button" className="cursor-pointer"
+                                disabled={isSaving}
+                                onClick={handleEdit}>
                                 {isSaving ? "Saving..." : "Save"}
                             </Button>
                         </div>

@@ -1,12 +1,10 @@
 "use client";
 
-import { useState } from "react";
 import { useFormStore } from "@/store/formStore";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { cn } from "@/lib/utils";
 import { backgrounds, themes, borders } from "@/lib/constent";
 import { updateFormStyles } from "@/db/actions/form.action";
-import { Loader2 } from "lucide-react";
 
 export default function EditFormSidebar({ formId }: { formId: string }) {
 	const theme = useFormStore((state) => state.theme);
@@ -15,25 +13,20 @@ export default function EditFormSidebar({ formId }: { formId: string }) {
 	const setFormBackground = useFormStore((state) => state.setFormBackground);
 	const borderStyle = useFormStore((state) => state.borderStyle);
 	const setBorderStyle = useFormStore((state) => state.setBorderStyle);
-	const [saving, setSaving] = useState(false);
 
 	const handleUpdate = async (key: "theme" | "formBackground" | "borderStyle", value: string) => {
 		if (!formId) return;
-		setSaving(true);
-		try {
-			await updateFormStyles({
-				formId,
-				theme: key === "theme" ? value : theme,
-				formBackground: key === "formBackground" ? value : formBackground,
-				borderStyle: key === "borderStyle" ? value : borderStyle,
-			});
-		} finally {
-			setSaving(false);
-		}
+		await updateFormStyles({
+			formId,
+			theme: key === "theme" ? value : theme,
+			formBackground: key === "formBackground" ? value : formBackground,
+			borderStyle: key === "borderStyle" ? value : borderStyle,
+		});
 	};
 
 	return (
-		<aside className="sticky top-1 left-0 z-20 h-[calc(100vh-2rem)] m-4 flex flex-col justify-between rounded-2xl border border-primary bg-background p-4 shadow-2xl backdrop-blur-md transition-all duration-300 max-sm:px-2 sm:p-4 lg:min-w-72 space-y-8">			<div>
+		<aside className="sticky top-20 max-lg:hidden left-0 z-20 h-fit m-4 flex flex-col justify-between rounded-2xl border border-primary bg-background p-4 shadow-2xl backdrop-blur-md transition-all duration-300 max-sm:px-2 sm:p-4 lg:min-w-72 space-y-8">
+			<div>
 				<h3 className="font-bold mb-2 text-lg tracking-wide text-primary/90 border-b border-muted pb-2 uppercase">
 					Theme
 				</h3>
@@ -43,7 +36,7 @@ export default function EditFormSidebar({ formId }: { formId: string }) {
 						setTheme(val);
 						handleUpdate("theme", val);
 					}}
-					className="flex flex-wrap gap-2"
+					className="grid grid-cols-2"
 				>
 					{themes.map((t) => (
 						<label
@@ -71,7 +64,7 @@ export default function EditFormSidebar({ formId }: { formId: string }) {
 							setFormBackground(val);
 							handleUpdate("formBackground", val);
 						}}
-						className="space-y-2"
+						className="space-y-1"
 					>
 						{backgrounds.map((bg) => (
 							<label
@@ -100,7 +93,7 @@ export default function EditFormSidebar({ formId }: { formId: string }) {
 				<h3 className="font-bold mb-2 text-lg tracking-wide text-primary/90 border-b border-muted pb-2 uppercase">
 					Border
 				</h3>
-				<div className="max-h-48 overflow-y-auto pr-1 custom-scrollbar">
+				<div className="max-h-32 overflow-y-auto pr-1 custom-scrollbar">
 					<RadioGroup
 						value={borderStyle}
 						onValueChange={(val) => {
@@ -126,11 +119,11 @@ export default function EditFormSidebar({ formId }: { formId: string }) {
 					</RadioGroup>
 				</div>
 			</div>
-			{saving && (
+			{/* {saving && (
 				<div className="flex items-center gap-2 text-primary text-sm pt-2">
 					<Loader2 className="animate-spin size-4" /> Saving...
 				</div>
-			)}
+			)} */}
 		</aside>
 	);
 }
