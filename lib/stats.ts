@@ -47,8 +47,8 @@ export const getStats = async () => {
             label: "Top Form",
             value:
                 topForm && topForm.title
-                ? topForm.title.split(" ").slice(0, 3).join(" ")
-                : "Customer Feedback",
+                ? topForm.title.split(" ").slice(0, 2).join(" ") + "..."
+                : "No Forms",
             icon: "Star",
             color: "#f59e0b",
             },

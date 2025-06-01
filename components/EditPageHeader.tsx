@@ -5,14 +5,15 @@ import { useFormStore } from "@/store/formStore";
 import { ArrowLeft, Eye, Save } from "lucide-react";
 import ShareButton from "@/components/shareButton";
 import Link from "next/link";
+import { cn } from "@/lib/utils";
 
 export default function EditPageHeader() {
 
     const { previewMode, setPreviewMode, title, formId } = useFormStore();
 
     return (
-        <header className={`w-full ${previewMode ? 'top-0' : 'lg:mt-4 mb-1 top-1 border border-primary rounded-2xl'} min-w-[220px] mx-auto bg-background/70 shadow-lg backdrop-blur-lg z-30 sticky px-6 py-2 flex flex-col`}>
-            <div className="flex items-center justify-between w-full">
+        <header className={`w-full ${previewMode ? 'top-0' : 'lg:mt-4 mb-1 top-4 border border-primary rounded-2xl'} min-w-[220px] mx-auto bg-background/70 shadow-lg backdrop-blur-lg z-30 sticky px-6 py-2 flex flex-col`}>
+            <div className={cn("flex items-center justify-between w-full", previewMode && "max-w-7xl mx-auto")}>
                 {/* Branding (left) */}
                 <div className="flex items-center gap-3">
                     <div className="bg-primary/10 rounded-full p-2 shadow-inner">

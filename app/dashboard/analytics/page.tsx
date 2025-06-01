@@ -33,7 +33,7 @@ const SkeletonCard = () => (
 )
 
 const SkeletonChart = () => (
-	<div className="bg-card rounded-xl border shadow-md p-4 sm:p-6 max-md:hidden ">
+	<div className="bg-card rounded-xl border shadow-md p-4 sm:p-6 max-md:hidden">
 		<div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 gap-2 sm:gap-0">
 			<div>
 				<div className="h-4 w-40 bg-muted rounded mb-1" />

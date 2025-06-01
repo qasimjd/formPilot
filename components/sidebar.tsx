@@ -66,7 +66,7 @@ const Sidebar = () => {
       </div>
 
       {/* Progress + Upgrade Prompt or Pro Info (Visible on Desktop) */}
-      <div className="hidden lg:block space-y-3 mt-auto mb-6">
+      <div className="hidden lg:block space-y-3 mt-auto mb-4">
         {isPro ? (
           <div className="flex flex-col space-y-2">
             <div className="flex items-center justify-between bg-primary/10 pl-4 pr-2 py-2 rounded-xl shadow-sm">

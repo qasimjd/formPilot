@@ -14,7 +14,6 @@ import { getFormById } from "@/db/actions/form.action";
 import EditPageHeader from "@/components/EditPageHeader";
 import { useFormStore } from "@/store/formStore";
 import FormSkeleton from "@/components/FormSkeleton";
-import { HeroHeader } from "@/components/hero8-header";
 
 
 const EditFormPage = () => {
@@ -113,8 +112,7 @@ const EditFormPage = () => {
         </main>
       ) : (
         <>
-          <HeroHeader />
-          <main className="relative flex flex-wrap content-start mt-16">
+          <main className="relative flex flex-wrap content-start">
               <EditPageSidebar formId={id} />
             <div className="flex-1 min-w-[320px]">
               <EditPageHeader />
