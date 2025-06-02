@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Raleway as RalewayFont } from "next/font/google";
 import "./globals.css";
-import { ThemeProvider } from "@/components/theme-provider";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "@/components/ui/sonner"
 
@@ -25,17 +24,10 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
         <body className={`${Raleway.variable} antialiased font-Raleway`}>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="light"
-            enableSystem
-            disableTransitionOnChange
-          >
             <main className="flex min-h-screen flex-col">
               {children}
             </main>
             <Toaster position="top-center" richColors />
-          </ThemeProvider>
         </body>
       </html>
     </ClerkProvider>

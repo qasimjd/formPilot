@@ -31,7 +31,7 @@ const DashboardHeader = () => {
                     Manage your projects and tasks
                 </p>
             </div>
-            <div className="w-full max-sm:hidden sm:w-auto flex justify-center sm:justify-end">
+            <div className="w-full hidden sm:w-auto sm:flex justify-center sm:justify-end">
                 <CreateForm />
             </div>
         </header>
