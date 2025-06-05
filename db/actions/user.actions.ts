@@ -10,9 +10,8 @@ export async function createUser(user: {
     lastName: string;
     photo: string;
 }) {
-
     const [newUser] = await db.insert(Users).values({
-        id: user.clerkId,
+        clerkId: user.clerkId,
         email: user.email,
         name: user.username,
     }).returning();
@@ -29,14 +28,14 @@ export async function updateUser(clerkId: string, user: {
         .set({
             name: user.username,
         })
-        .where(eq(Users.id, clerkId))
+        .where(eq(Users.clerkId, clerkId))
         .returning();
     return updatedUser;
 }
 
 export async function deleteUser(clerkId: string) {
     const [deletedUser] = await db.delete(Users)
-        .where(eq(Users.id, clerkId))
+        .where(eq(Users.clerkId, clerkId))
         .returning();
     return deletedUser;
 }

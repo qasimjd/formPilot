@@ -25,6 +25,7 @@ export const FormResponses = pgTable("formResponses", {
 
 export const Users = pgTable("users", {
     id: uuid("id").defaultRandom().primaryKey().notNull(),
+    clerkId: varchar("clerk_id", { length: 255 }).notNull().unique(),
     email: varchar("email", { length: 255 }).notNull().unique(),
     name: varchar("name", { length: 255 }),
     stripeCustomerId: varchar("stripe_customer_id", { length: 255 }),
