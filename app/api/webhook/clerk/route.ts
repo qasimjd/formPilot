@@ -124,3 +124,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
+
+export async function GET() {
+  return NextResponse.json({ message: "Hello, world!" });
+}
