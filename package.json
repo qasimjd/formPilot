@@ -42,6 +42,7 @@
     "recharts": "^2.15.3",
     "sonner": "^2.0.3",
     "stripe": "^18.1.1",
+    "svix": "^1.66.0",
     "tailwind-merge": "^3.3.0",
     "xlsx": "^0.18.5",
     "zustand": "^5.0.4"
