@@ -1,9 +1,12 @@
 import { WebhookEvent } from "@clerk/nextjs/server";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
-import { Webhook } from "svix";
+// ✅ REPLACED: Removed `svix` and used native `crypto` instead
+import crypto from "crypto";
+
 import { createUser, deleteUser, updateUser } from "@/db/actions/user.actions";
 
+// Type interfaces remain unchanged
 interface UserCreatedData {
   id: string;
   email_addresses?: { email_address: string }[];
@@ -25,56 +28,54 @@ interface UserDeletedData {
   id: string;
 }
 
-export async function POST(req: Request) {
-  const SIGNING_SECRET_BASE64 = process.env.SIGNING_SECRET;
+// ✅ ADDED: Manual signature verification logic
+function verifySignature(
+  secret: string,
+  body: string,
+  timestamp: string,
+  signature: string
+): boolean {
+  const payload = `${timestamp}.${body}`;
+  const hmac = crypto.createHmac("sha256", Buffer.from(secret, "utf8"));
+  hmac.update(payload);
+  const expectedSignature = `v1,${hmac.digest("hex")}`;
 
-  if (!SIGNING_SECRET_BASE64) {
+  const providedSignatures = signature.split(" ");
+  return providedSignatures.includes(expectedSignature);
+}
+
+export async function POST(req: Request) {
+  const SIGNING_SECRET = process.env.SIGNING_SECRET;
+  if (!SIGNING_SECRET) {
     return NextResponse.json({ error: "SIGNING_SECRET is missing" }, { status: 500 });
   }
 
-  let SIGNING_SECRET: string;
-  try {
-    SIGNING_SECRET = Buffer.from(SIGNING_SECRET_BASE64, "base64").toString("utf-8");
-  } catch {
-    return NextResponse.json({ error: "Invalid SIGNING_SECRET format" }, { status: 500 });
-  }
+  const headersList = await headers();
+  const svixId = headersList.get("svix-id");
+  const svixTimestamp = headersList.get("svix-timestamp");
+  const svixSignature = headersList.get("svix-signature");
 
-  const wh = new Webhook(SIGNING_SECRET);
-  const headerPayload = await headers();
-  const svix_id = headerPayload.get("svix-id");
-  const svix_timestamp = headerPayload.get("svix-timestamp");
-  const svix_signature = headerPayload.get("svix-signature");
-
-  if (!svix_id || !svix_timestamp || !svix_signature) {
+  if (!svixId || !svixTimestamp || !svixSignature) {
     return NextResponse.json({ error: "Missing Svix headers" }, { status: 400 });
   }
 
-  const payload = await req.json();
-  const body = JSON.stringify(payload);
+  // ✅ CHANGED: Read raw body text to use in signature validation
+  const bodyText = await req.text();
+  const payload = JSON.parse(bodyText);
 
-  let evt: WebhookEvent;
-
-  try {
-    evt = wh.verify(body, {
-      "svix-id": svix_id,
-      "svix-timestamp": svix_timestamp,
-      "svix-signature": svix_signature,
-    }) as WebhookEvent;
-  } catch (err) {
-    console.error("Error verifying webhook:", err);
-    return NextResponse.json({ error: "Webhook verification failed" }, { status: 400 });
+  // ✅ CHANGED: Use manual signature verification instead of `svix.verify`
+  if (!verifySignature(SIGNING_SECRET, bodyText, svixTimestamp, svixSignature)) {
+    console.error("❌ Invalid webhook signature.");
+    return NextResponse.json({ error: "Invalid signature" }, { status: 400 });
   }
 
+  const evt = payload as WebhookEvent;
   const eventType = evt.type;
 
   try {
     switch (eventType) {
       case "user.created": {
         const data = evt.data as UserCreatedData;
-        if (!data.id) {
-          return NextResponse.json({ error: "Missing user id" }, { status: 400 });
-        }
-
         const user = {
           clerkId: data.id,
           email: data.email_addresses?.[0]?.email_address ?? "",
@@ -89,9 +90,6 @@ export async function POST(req: Request) {
 
       case "user.updated": {
         const data = evt.data as UserUpdatedData;
-        if (!data.id) {
-          return NextResponse.json({ error: "Missing user id" }, { status: 400 });
-        }
         const user = {
           firstName: data.first_name ?? "",
           lastName: data.last_name ?? "",
@@ -104,27 +102,20 @@ export async function POST(req: Request) {
 
       case "user.deleted": {
         const data = evt.data as UserDeletedData;
-        if (!data.id) {
-          return NextResponse.json({ error: "Missing user id" }, { status: 400 });
-        }
         const deletedUser = await deleteUser(data.id);
         return NextResponse.json({ message: "User deleted", user: deletedUser });
       }
 
-      default: {
-        console.log(`Unhandled webhook event: ${eventType}`, body);
-        return NextResponse.json(
-          { message: "Event received but not processed" },
-          { status: 200 }
-        );
-      }
+      default:
+        console.log(`Unhandled webhook event: ${eventType}`);
+        return NextResponse.json({ message: "Unhandled event" }, { status: 200 });
     }
-  } catch (error) {
-    console.error(`Error processing event ${eventType}:`, error);
+  } catch (err) {
+    console.error(`❌ Error processing ${eventType}:`, err);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
 
 export async function GET() {
-  return NextResponse.json({ message: "Hello, world!" });
+  return NextResponse.json({ message: "Webhook endpoint live." });
 }
