@@ -1,11 +1,12 @@
 'use client'
 
-import React from 'react'
 import { Plans } from '@/lib/constent'
 import Link from 'next/link'
+import { useUser } from '@clerk/nextjs'
 
 const UpgradePage = () => {
-  const isUpgrade = true
+  const isUpgrade = false
+  const {user} = useUser();
 
   return (
     <main className="p-4 md:p-8 max-w-6xl">
@@ -23,7 +24,7 @@ const UpgradePage = () => {
               d="M8 12l2.5 2.5L16 9"
             />
           </svg>
-          <h2 className="text-3xl font-extrabold text-primary text-center mb-2">You're a Pro!</h2>
+          <h2 className="text-3xl font-extrabold text-primary text-center mb-2">You&apos;re a Pro!</h2>
           <p className="text-primary/80 text-lg text-center mb-4">
             Thank you for upgrading. You now have access to all premium features and priority support.
           </p>
@@ -92,7 +93,7 @@ const UpgradePage = () => {
 
                 {plan.link ? (
                   <Link
-                    href={plan.link}
+                    href={plan.link + `?prefilled_email=${user?.primaryEmailAddress?.emailAddress}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center justify-center gap-2 px-6 py-2 sm:px-8 sm:py-3 rounded-xl bg-primary text-white font-bold shadow-lg text-sm sm:text-lg hover:bg-primary/90 hover:scale-105 transition-all duration-200 border-2 border-transparent hover:border-indigo-400"

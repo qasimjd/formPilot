@@ -10,6 +10,13 @@ export async function createUser(user: {
     lastName: string;
     photo: string;
 }) {
+    // Check if user with this email already exists
+    const existingUser = await db.query.Users.findFirst({
+        where: eq(Users.email, user.email),
+    });
+    if (existingUser) {
+        return existingUser;
+    }
     const [newUser] = await db.insert(Users).values({
         clerkId: user.clerkId,
         email: user.email,

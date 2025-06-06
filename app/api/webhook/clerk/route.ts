@@ -5,19 +5,19 @@ import { NextResponse } from "next/server";
 import { Webhook } from "svix";
 
 export async function POST(req: Request) {
-  const SIGNING_SECRET = process.env.SIGNING_SECRET || "";
+  const SIGNING_SECRET = process.env.CLERK_SIGNING_SECRET || "";
   if (!SIGNING_SECRET) {
-    throw new Error("❌ SIGNING_SECRET is missing from environment variables.");
+    throw new Error("❌ CLERK_SIGNING_SECRET is missing from environment variables.");
   }
   try {
     Buffer.from(SIGNING_SECRET, "base64").toString("utf-8");
   } catch (error) {
-    console.error("❌ Error: SIGNING_SECRET is not a valid Base64 string.");
+    console.error("❌ Error: SIGNING_SECRET is not a valid Base64 string.", error);
     return new Response("Server Error: Invalid SIGNING_SECRET", { status: 500 });
   }
 
   const wh = new Webhook(SIGNING_SECRET);
-  
+
   const headerPayload = await headers();
   const svix_id = headerPayload.get('svix-id');
   const svix_timestamp = headerPayload.get('svix-timestamp');

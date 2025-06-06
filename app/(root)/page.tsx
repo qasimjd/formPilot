@@ -2,7 +2,6 @@ import Link from "next/link"
 import Image from "next/image"
 import { HeroHeader } from "@/components/hero8-header"
 import { Button } from "@/components/ui/button"
-import { Brain, ExternalLink, FilePenLine } from "lucide-react"
 import { Plans } from '@/lib/constent'
 
 export default function LandingPage() {
