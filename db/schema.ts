@@ -22,17 +22,15 @@ export const FormResponses = pgTable("formResponses", {
     submittedBy: varchar("submitted_by", { length: 255 }).notNull(),
 });
 
-
 export const Users = pgTable("users", {
-    id: uuid("id").defaultRandom().primaryKey().notNull(),
-    clerkId: varchar("clerk_id", { length: 255 }).notNull().unique(),
-    email: varchar("email", { length: 255 }).notNull().unique(),
-    name: varchar("name", { length: 255 }),
-    stripeCustomerId: varchar("stripe_customer_id", { length: 255 }),
-    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
-    updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
+  id: uuid("id").defaultRandom().primaryKey().notNull(),
+  clerkId: varchar("clerk_id", { length: 255 }).notNull().unique(),
+  email: varchar("email", { length: 255 }).notNull().unique(),
+  name: varchar("name", { length: 255 }),
+  stripeCustomerId: varchar("stripe_customer_id", { length: 255 }),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
 });
-
 
 export const Subscriptions = pgTable("subscriptions", {
     id: uuid("id").defaultRandom().primaryKey().notNull(),
