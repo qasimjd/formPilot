@@ -81,7 +81,7 @@ export default function LandingPage() {
           <div className="max-w-6xl mx-auto px-4">
             <h2 className="text-3xl md:text-4xl font-bold text-center mb-8">Our Plans</h2>
             <div className="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-8">
-              {Plans.map((plan, idx) => {
+              {Plans.map((plan) => {
                 const isYearly = plan.name.toLowerCase().includes('yearly');
                 return (
                   <div
