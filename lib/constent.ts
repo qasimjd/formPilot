@@ -123,17 +123,41 @@ export const borders = [
 
 export const Plans = [
   {
+    name: "Free",
+    price: "$0.00",
+    priceId: "free",
+    description: "3 forms, 300 responses/month, basic analytics.",
+    features: [
+      "3 forms",
+      "300 responses/month",
+      "Basic analytics",
+      "Community support"
+    ]
+  },
+  {
     link: "https://buy.stripe.com/test_aFa5kFcach0W3R6asv0sU01",
     name: "Pro Yearly",
     price: "$99.99",
     priceId: "prod_SNPQwYDZ887aDP",
-    description: "Upgrade to Pro for unlimited forms and responses. Yearly subscription.",
+    description: "Unlimited forms, responses, analytics. Best value.",
+    features: [
+      "Unlimited forms",
+      "Unlimited responses",
+      "Advanced analytics",
+      "Yearly subscription (save 17%)"
+    ]
   },
   {
     link: "https://buy.stripe.com/test_6oUfZjb687qmcnC8kn0sU00",
     name: "Pro Monthly",
     price: "$9.99",
     priceId: "prod_SNPPEHxU4syzyf",
-    description: "Upgrade to Pro for unlimited forms and responses. Monthly subscription.",
+    description: "Unlimited forms, responses, analytics. Monthly plan.",
+    features: [
+      "Unlimited forms",
+      "Unlimited responses",
+      "Advanced analytics",
+      "Monthly subscription"
+    ]
   }
 ]
