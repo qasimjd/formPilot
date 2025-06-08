@@ -13,6 +13,7 @@ export const metadata = {
 
 const DashboardContent = async () => {
   const forms = await getUserForms();
+  console.log("Fetched forms:", forms);
 
   return (
     <main className="w-full p-4 max-md:mt-4 md:p-8 max-w-6xl mx-auto">
@@ -36,7 +37,7 @@ const DashboardContent = async () => {
           <FormCard
             key={form.id}
             id={form.id}
-            title={form.title || 'Untitled Form'}
+            title={form.title}
             createdAt={form.createdAt}
             responsesCount={form.responsesCount}
             variant="formCard"

@@ -82,25 +82,23 @@ export const updateFieldInDatabase = async (
         if (!results.length) {
             throw new Error("Form not found or access denied");
         }
-
         const formData = results[0].formData;
         const cleaned = formData.replace(/```json|```/g, "").trim();
-
         let parsed: any;
         try {
             parsed = JSON.parse(cleaned);
+            if (typeof parsed === 'string') {
+                parsed = JSON.parse(parsed);
+            }
         } catch (e) {
             throw new Error("Invalid JSON in formData");
         }
-
         if (!Array.isArray(parsed.fields)) {
             throw new Error("Invalid form structure: 'fields' is not an array");
         }
-
         parsed.fields = parsed.fields.map((field: FieldType) =>
             field.id === updatedField.id ? { ...field, ...updatedField } : field
         );
-
         const updated = await db
             .update(JsonForms)
             .set({
@@ -109,8 +107,6 @@ export const updateFieldInDatabase = async (
             })
             .where(and(eq(JsonForms.id, formId), eq(JsonForms.createdBy, userId)))
             .returning({ id: JsonForms.id });
-
-
         return {
             success: true,
             date: updated[0]
@@ -141,14 +137,15 @@ export const deleteFieldFromDatabase = async (fieldId: string, formId: string) =
         let parsed: any;
         try {
             parsed = JSON.parse(cleaned);
+            if (typeof parsed === 'string') {
+                parsed = JSON.parse(parsed);
+            }
         } catch (e) {
             throw new Error("Invalid JSON in formData");
         }
-
         if (!Array.isArray(parsed.fields)) {
             throw new Error("Invalid form structure: 'fields' is not an array");
         }
-
         parsed.fields = parsed.fields.filter((field: FieldType) => field.id !== fieldId);
         const updated = await db
             .update(JsonForms)
@@ -221,14 +218,18 @@ export const getUserForms = async () => {
             .from(JsonForms)
             .where(eq(JsonForms.createdBy, userId))
             .orderBy(desc(JsonForms.createdAt));
-        // Parse formData for title if possible
         return results.map((form: any) => {
             let title = 'Untitled Form';
             try {
                 const cleaned = form.formData.replace(/```json|```/g, '').trim();
-                const parsed = JSON.parse(cleaned);
+                let parsed = JSON.parse(cleaned);
+                if (typeof parsed === 'string') {
+                    parsed = JSON.parse(parsed);
+                }
                 if (parsed.title) title = parsed.title;
-            } catch { }
+            } catch (e) {
+                console.error('Error parsing formData for title:', e, form.formData);
+            }
             return {
                 id: form.id,
                 title,
@@ -241,15 +242,32 @@ export const getUserForms = async () => {
     }
 };
 
+export const getFormByIdPublic = async (id: string) => {
+    try {
+        const results = await db
+            .select()
+            .from(JsonForms)
+            .where(eq(JsonForms.id, id));
+        if (!results.length) {
+            throw new Error("Form not found");
+        }
+        return results[0];
+    } catch (error) {
+        console.error("Error getting public form by ID:", error);
+        throw new Error("Failed to get form");
+    }
+};
+
 export const deleteFormById = async (id: string) => {
     try {
         const { userId } = await auth();
         if (!userId) throw new Error('Unauthorized');
-        await db.delete(JsonForms).where(and(eq(JsonForms.id, id), eq(JsonForms.createdBy, userId)));
         await db.delete(FormResponses).where(eq(FormResponses.formId, id));
+        await db.delete(JsonForms).where(and(eq(JsonForms.id, id), eq(JsonForms.createdBy, userId)));
         revalidatePath(`/dashboard`);
         return true;
     } catch (error) {
+        console.error('Error deleting form:', error);
         return false;
     }
 };

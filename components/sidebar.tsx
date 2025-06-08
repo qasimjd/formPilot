@@ -7,24 +7,46 @@ import Link from 'next/link';
 import { Progress } from "@/components/ui/progress"
 import Image from 'next/image';
 import CreateForm from './createForm';
-import { getUserForms } from '@/db/actions/form.action';
+import { getUserFreeCredits, getUserPlan } from '@/db/actions/user.actions';
 import { useEffect, useState } from 'react';
 import { UserButton, useUser } from '@clerk/nextjs';
+import { useFormStore } from '@/store/formStore';
 
 const Sidebar = () => {
   const pathname = usePathname();
-  const [formCount, setFormCount] = useState<number>(0);
+  const [isPro, setIsPro] = useState<boolean>(false);
+  const [credits, setCredits] = useState<number>(3);
 
   const { user } = useUser();
-  const isPro = true
+  const { setIsProUser, setPlan, setPlanStartsOn, setPlanEndsOn } = useFormStore();
 
   useEffect(() => {
     const fetchFormCount = async () => {
-      const forms = await getUserForms();
-      setFormCount(forms.length);
+      const credites = await getUserFreeCredits();
+      setCredits(credites ?? 0)
     };
     fetchFormCount();
   }, []);
+
+  useEffect(() => {
+    const checkPro = async () => {
+      if (user?.id) {
+        const plan = await getUserPlan(user.id);
+        setIsPro(plan.userPlan === 'premium');
+        if (plan.userPlan === 'premium') {
+          setIsProUser(true);
+          setPlan(plan.period ?? "free");
+          setPlanStartsOn(plan.startDate);
+          setPlanEndsOn(plan.endDate);
+        }
+        else {
+          setIsProUser(false);
+          setPlan("free");
+        }
+      }
+    };
+    checkPro();
+  }, [user]);
 
   return (
     <aside className="sticky top-4 left-0 z-20 h-[calc(100vh-2rem)] flex flex-col justify-between lg:rounded-2xl lg:border lg:border-primary bg-background md:py-4 shadow-2xl backdrop-blur-md transition-all duration-300 max-lg:px-2 lg:p-4 px-2 rounded-lg lg:min-w-72 space-y-8">
@@ -82,9 +104,9 @@ const Sidebar = () => {
           </div>
         ) : (
           <>
-            <Progress value={Math.min((formCount / 3) * 100, 100)} />
+            <Progress value={credits === 0 ? 100 : Math.min((credits / 3) * 100, 100)} />
             <p className="text-sm">
-              <strong>{formCount}</strong> out of <strong>3</strong> Forms Created
+              <strong>{credits}</strong> out of <strong>3</strong> Free Credits Left
             </p>
             <p className="text-xs text-muted-foreground">
               Upgrade to <span className="font-semibold text-primary">Pro</span> to unlock unlimited forms.

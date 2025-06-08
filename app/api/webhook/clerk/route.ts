@@ -47,26 +47,23 @@ export async function POST(req: Request) {
 
   try {
     if (eventType === "user.created") {
-      const { email_addresses, image_url, first_name, last_name, username } = evt.data;
+      const { email_addresses, first_name, last_name, username } = evt.data;
       const user = {
         clerkId: id!,
         email: email_addresses?.[0]?.email_address ?? "",
+        name: first_name ?? "" + last_name ?? "",
         username: username ?? "",
-        firstName: first_name ?? "",
-        lastName: last_name ?? "",
-        photo: image_url ?? "",
       };
       const newUser = await createUser(user);
       return NextResponse.json({ message: "User created", user: newUser });
     }
 
     if (eventType === "user.updated") {
-      const { image_url, first_name, last_name, username } = evt.data;
+      const { first_name, last_name, username, email_addresses } = evt.data;
       const user = {
-        firstName: first_name ?? "",
-        lastName: last_name ?? "",
+        name: first_name ?? "" + last_name ?? "",
         username: username ?? "",
-        photo: image_url ?? "",
+        email: email_addresses?.[0]?.email_address ?? "",
       };
       const updatedUser = await updateUser(id!, user);
       return NextResponse.json({ message: "User updated", user: updatedUser });

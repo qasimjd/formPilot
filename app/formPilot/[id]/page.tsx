@@ -3,11 +3,8 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { Card, CardContent } from "@/components/ui/card";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { MoveLeft } from "lucide-react";
 import FormUI from "@/components/FormUI";
-import { getFormById } from "@/db/actions/form.action";
+import { getFormByIdPublic } from "@/db/actions/form.action";
 import { useFormStore } from "@/store/formStore";
 import FormSkeleton from "@/components/FormSkeleton";
 
@@ -26,9 +23,10 @@ const Page = () => {
             setLoading(true);
             setError(null);
             try {
-                const formData = await getFormById(id);
-                if (!formData) {
-                    setError("Form not found or unauthorized access.");
+                const formData = await getFormByIdPublic(id);
+                console.log("Fetched formData:", formData);
+                if (!formData || !formData.formData) {
+                    setError("Form not found or contains no data.");
                     setLoading(false);
                     return;
                 }
@@ -37,16 +35,26 @@ const Page = () => {
                 setBorderStyle(formData.borderStyle);
                 try {
                     const cleaned = formData.formData.replace(/```json|```/g, "").trim();
-                    const parsed = JSON.parse(cleaned);
+                    let parsed = JSON.parse(cleaned);
+                    if (typeof parsed === "string") {
+                        parsed = JSON.parse(parsed);
+                    }
                     if (!parsed.fields || !Array.isArray(parsed.fields)) {
-                        throw new Error("Invalid form fields");
+                        parsed.fields = [];
+                    }
+                    if (parsed.fields.length === 0) {
+                        setError("This form has no fields. Please add at least one field.");
+                        setParsedFormData(parsed); 
+                        return;
                     }
                     setParsedFormData(parsed);
-                } catch {
+                } catch (err) {
+                    console.error("Form parse error:", err);
                     setError("Invalid form data. Please try again.");
                 }
-            } catch {
-                setError("Failed to fetch form data.");
+            } catch (err) {
+                console.error("Form fetch error:", err);
+                setError("Failed to fetch form data: " + (err));
             } finally {
                 setLoading(false);
             }
@@ -69,16 +77,6 @@ const Page = () => {
             <main className="flex items-center justify-center min-h-[60vh]">
                 <Card>
                     <CardContent>
-                        <Button
-                            asChild
-                            variant="outline"
-                            className="absolute top-4 left-4 hover:bg-primary hover:text-white"
-                        >
-                            <Link href="/dashboard">
-                                <MoveLeft className="mr-2" />
-                                Back
-                            </Link>
-                        </Button>
                         <div className="text-center text-lg font-semibold text-red-500 py-8">
                             {error}
                         </div>

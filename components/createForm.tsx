@@ -10,25 +10,56 @@ import { Textarea } from './ui/textarea';
 import { generateFormJSON } from '@/lib/gemini';
 import { saveFormToDatabase } from '@/db/actions/form.action';
 import { useRouter } from 'next/navigation';
+import { useFormStore } from '@/store/formStore';
+import { toast } from 'sonner';
+import { dicrementCredits, getUserFreeCredits } from '@/db/actions/user.actions';
 
 const CreateForm = () => {
   const [userPrompt, setUserPrompt] = useState('');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
+  const { isProUser } = useFormStore();
+
+  const checkCredits = async () => {
+    const freeCredits = await getUserFreeCredits();
+    return freeCredits
+  }
+
   const handleGenerate = async () => {
     setLoading(true);
+
+    let freeAndNoCredits = false;
+    if (!isProUser) {
+      const credits = await checkCredits();
+      freeAndNoCredits = (credits ?? 0) < 1;
+    }
+
+    if (freeAndNoCredits) {
+      toast.warning("You've used all your free form credits. Please upgrade your plan to continue creating forms.", {
+        action: {
+          label: 'Upgrade Now',
+          onClick: () => router.push('/dashboard/upgrade'),
+        },
+        duration: 6000,
+      });
+      setLoading(false);
+      return;
+    }
     try {
       const json = await generateFormJSON(userPrompt);
       if (!json) { throw new Error('No JSON generated'); }
-      const formId = await saveFormToDatabase(json);
+      // Ensure JSON is stringified for DB (saveFormToDatabase expects a string)
+      const formId = await saveFormToDatabase(JSON.stringify(json));
       if (formId) {
+        await dicrementCredits();
         router.push(`/edit-form/${formId}`);
       } else {
-        throw new Error('Failed to save form')
+        toast.error('Failed to save form');
       }
     } catch (error) {
       console.error('Failed to generate form:', error);
+      toast.error('Something went wrong while generating your form. Please try again.');
     } finally {
       setLoading(false);
     }

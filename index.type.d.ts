@@ -10,12 +10,12 @@ interface Field {
 interface FormDefinition {
   title: string;
   subheading?: string;
-  theme: string;
-  borderStyle: string;
-  formId: string;
-  formBackground: null | string;
+  theme?: string;
+  borderStyle?: string;
+  formId?: string;
+  formBackground?: null | string;
   fields: Field[];
-  responsesCount: number;
+  responsesCount?: number;
 }
 interface FormState {
   title: string;
@@ -25,6 +25,17 @@ interface FormState {
   formBackground: string;
   borderStyle: string;
   previewMode: boolean;
+  isProUser: boolean;
+  plan: "free" | "monthly" | "yearly";
+  planStartsOn: Date | null;
+  planEndsOn: Date | null;
+  freeCredits: number;
+
+  setFreeCredits: (freeCredits: number) => void;
+  setPlanStartsOn: (planStartsOn: Date | null) => void;
+  setPlanEndsOn: (planEndsOn: Date | null) => void;
+  setPlan: (plan: "free" | "monthly" | "yearly") => void;
+  setIsProUser: (isProUser: boolean) => void;
   setFormId: (formId: string) => void;
   setPreviewMode: (previewMode: boolean) => void;
   setForm: (title: string, fields: Field[]) => void;

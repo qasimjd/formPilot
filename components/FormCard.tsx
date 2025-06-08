@@ -10,6 +10,8 @@ import ExportToExcelButton from './ExportToExcelButton';
 
 const FormCard = React.memo(function FormCard({ id, title, createdAt, variant, responsesCount }: FormCardProps) {
 
+    console.log(title)
+
     return (
         <Card
             className="relative w-full max-w-sm mx-auto shadow-xl rounded-2xl border border-gray-300 dark:border-gray-800 bg-gradient-to-br from-white/80 via-blue-100/80 to-blue-300/80 dark:from-gray-900/80 dark:via-gray-800/80 dark:to-blue-950/80 backdrop-blur-md flex flex-col justify-between transition-transform hover:scale-[1.03] hover:shadow-2xl duration-200 group">

@@ -38,9 +38,8 @@ const EditFormPage = () => {
       setError(null);
       try {
         const formData = await getFormById(id);
-        if (!formData) {
-          setError("Form not found or unauthorized access.");
-          return;
+        if (!formData || !formData.formData) {
+          throw new Error("Form not found or contains no data.");
         }
 
         setTheme(formData.theme);
@@ -49,35 +48,42 @@ const EditFormPage = () => {
         setFormId(formData.id);
 
         const cleaned = formData.formData.replace(/```json|```/g, "").trim();
-        const parsed: FormDefinition = JSON.parse(cleaned);
-
-        if (!parsed.fields || !Array.isArray(parsed.fields)) {
-          throw new Error("Invalid form fields");
+        let parsed = JSON.parse(cleaned);
+        if (typeof parsed === "string") {
+          parsed = JSON.parse(parsed);
         }
-
+        if (!parsed.fields || !Array.isArray(parsed.fields)) {
+          parsed.fields = [];
+        }
+        if (parsed.fields.length === 0) {
+          setError("This form has no fields. Please add at least one field.");
+          setParsedFormData(parsed); // Still set so UI can render
+          return;
+        }
         setParsedFormData(parsed);
-      } catch {
-        setError("Invalid or failed to fetch form data.");
+      } catch (error) {
+        console.error("Form fetch error:", error);
+        setError("An unexpected error occurred.");
       } finally {
         setLoading(false);
       }
     };
 
     if (id) fetchForm();
-  }, [id, setFormId, setTheme, setFormBackground, setBorderStyle]);
+  }, [id, setFormId]);
 
   if (loading) {
-  return (
-    <main className="relative flex gap-2 flex-wrap content-start mt-16 min-h-[100vh] px-4 py-12 bg-gradient-to-br from-white via-blue-50 to-blue-100 dark:from-gray-950 dark:via-gray-900 dark:to-blue-950 rounded-xl">
-      <div className="max-lg:hidden pt-1 h-screen border-4 border-gray-200 rounded-xl p-4 max-w-xs w-full">
-        <FormSkeleton variant="sidebar" />
-      </div>
-      <div className="flex-1 min-w-[320px] border-4 border-gray-200 rounded-xl p-4 mx-auto w-full">
-        <FormSkeleton variant="form" />
-      </div>
-    </main>
-  );
-}
+    return (
+      <main className="relative flex gap-2 flex-wrap content-start mt-4 min-h-[100vh] px-4 bg-gradient-to-br from-white via-blue-50 to-blue-100 dark:from-gray-950 dark:via-gray-900 dark:to-blue-950 rounded-xl">
+        <div className="max-lg:hidden pt-1 h-screen border-4 border-gray-200 rounded-xl p-4 max-w-xs w-full">
+          <FormSkeleton variant="sidebar" />
+        </div>
+        <div className="flex-1 min-w-[320px] border-4 border-gray-200 rounded-xl p-4 mx-auto w-full">
+          <FormSkeleton variant="form" />
+        </div>
+      </main>
+    );
+  }
 
   if (error) {
     return (
@@ -111,15 +117,15 @@ const EditFormPage = () => {
           {parsedFormData && <FormUI parsedFormData={parsedFormData} id={id} />}
         </main>
       ) : (
-        <>
-          <main className="relative flex flex-wrap content-start">
-              <EditPageSidebar formId={id} />
-            <div className="flex-1 min-w-[320px]">
-              <EditPageHeader />
-              {parsedFormData && <FormUI parsedFormData={parsedFormData} id={id} />}
-            </div>
-          </main>
-        </>
+        <main className="relative flex flex-wrap content-start">
+          <div className="sticky top-4 max-lg:hidden left-0 z-20 h-fit m-4 flex flex-col justify-between rounded-2xl border border-primary bg-background p-4 shadow-2xl backdrop-blur-md transition-all duration-300 max-sm:px-2 sm:p-4 lg:min-w-72 space-y-8">
+            <EditPageSidebar formId={id} />
+          </div>
+          <div className="flex-1 min-w-[320px]">
+            <EditPageHeader />
+            {parsedFormData && <FormUI parsedFormData={parsedFormData} id={id} />}
+          </div>
+        </main>
       )}
     </>
   );

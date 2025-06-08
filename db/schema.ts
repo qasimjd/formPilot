@@ -34,6 +34,7 @@ export const Users = pgTable("users", {
     name: varchar("name", { length: 255 }),
     plan: planEnum.default("free").notNull(),
     stripeCustomerId: varchar("stripe_customer_id", { length: 255 }),
+    freeCredits: integer("free_credits").default(3).notNull(),
 
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
     updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
