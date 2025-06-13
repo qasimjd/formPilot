@@ -126,12 +126,9 @@ export const Plans = [
     name: "Free",
     price: "$0.00",
     priceId: "free",
-    description: "3 forms, 300 responses/month, basic analytics.",
+    description: "Get started with the essentials. Create up to 3 forms for free.",
     features: [
       "3 forms",
-      "300 responses/month",
-      "Basic analytics",
-      "Community support"
     ]
   },
   {

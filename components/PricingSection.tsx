@@ -1,13 +1,38 @@
 "use client"
 
+import { getUserPlan } from '@/db/actions/user.actions';
 import { Plans } from '@/lib/constent';
 import { cn } from '@/lib/utils';
 import { useUser } from '@clerk/nextjs';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
 const PricingSection = ({ isHero }: { isHero?: boolean }) => {
-
     const { user } = useUser();
+    const [userPlan, setUserPlan] = useState<string>('free');
+    const [userPeriod, setUserPeriod] = useState<string | null>(null);
+    const [loading, setLoading] = useState<boolean>(true);
+
+    useEffect(() => {
+        const fetchPlan = async () => {
+            if (!user?.id) {
+                setUserPlan('free');
+                setUserPeriod(null);
+                setLoading(false);
+                return;
+            }
+            try {
+                const response = await getUserPlan(user.id);
+                setUserPlan(response?.userPlan || 'free');
+                setUserPeriod(response?.period || null);
+            } catch {
+                setUserPlan('free');
+                setUserPeriod(null);
+            }
+            setLoading(false);
+        };
+        fetchPlan();
+    }, [user]);
 
     return (
         <section>
@@ -28,11 +53,18 @@ const PricingSection = ({ isHero }: { isHero?: boolean }) => {
             <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3 p-4">
                 {Plans.map((plan) => {
                     const isYearly = plan.name.toLowerCase().includes("yearly");
+                    const isMonthly = plan.name.toLowerCase().includes("monthly");
+                    let isCurrent = false;
+                    if (userPlan === 'premium') {
+                        if (isYearly && userPeriod === 'yearly') isCurrent = true;
+                        if (isMonthly && userPeriod === 'monthly') isCurrent = true;
+                    } else if (userPlan === 'free' && plan.name.toLowerCase().includes('free')) {
+                        isCurrent = true;
+                    }
                     return (
                         <div
                             key={plan.priceId}
-                            className={`relative bg-white rounded-3xl shadow-lg p-8 border border-gray-100 transition-all duration-300 group hover:shadow-2xl hover:-translate-y-1.5 ${isYearly ? "ring-2 ring-indigo-500 border-primary scale-[1.03]" : ""
-                                }`}
+                            className={`relative bg-white rounded-3xl shadow-lg p-8 border border-gray-400 transition-all duration-300 group hover:shadow-2xl hover:-translate-y-1.5 ${isYearly ? "ring-2 ring-indigo-500 border-primary scale-[1.03]" : ""}`}
                         >
                             <div
                                 className={`absolute -z-10 w-64 h-64 rounded-full blur-3xl opacity-30 ${isYearly
@@ -68,17 +100,22 @@ const PricingSection = ({ isHero }: { isHero?: boolean }) => {
                             <p className="text-gray-500 text-sm mb-6 text-center">
                                 {plan.description}
                             </p>
-
-                            {plan.link && (
+                            {!loading && isCurrent ? (
+                                <span className="inline-flex items-center justify-center w-full px-6 py-3 rounded-xl bg-gray-200 text-gray-600 font-bold shadow-md text-sm border border-gray-300 cursor-not-allowed">
+                                    {isYearly ? 'Yearly Plan Active' : isMonthly ? 'Monthly Plan Active' : 'Current Plan'}
+                                </span>
+                            ) : plan.link && !loading ? (
                                 <Link
                                     href={`${plan.link}?prefilled_email=${user?.primaryEmailAddress?.emailAddress}`}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="inline-flex items-center justify-center w-full px-6 py-3 rounded-xl bg-primary text-white font-bold shadow-md text-sm hover:bg-primary/90 hover:scale-105 transition border border-transparent hover:border-indigo-400"
+                                    className={`inline-flex items-center justify-center w-full px-6 py-3 rounded-xl bg-primary text-white font-bold shadow-md text-sm border border-transparent hover:bg-primary/90 hover:scale-105 transition hover:border-indigo-400 ${userPlan !== 'free' ? 'opacity-60 pointer-events-none cursor-not-allowed' : ''}`}
+                                    tabIndex={userPlan !== 'free' ? -1 : 0}
+                                    aria-disabled={userPlan !== 'free'}
                                 >
                                     Upgrade Now
                                 </Link>
-                            )}
+                            ) : null}
                         </div>
                     );
                 })}

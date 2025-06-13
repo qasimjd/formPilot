@@ -3,10 +3,11 @@ import Image from "next/image"
 import { HeroHeader } from "@/components/hero8-header"
 import { Button } from "@/components/ui/button"
 import PricingSection from "@/components/PricingSection"
+import { GradientSlideButton } from "@/components/ui/gradient-slide-button"
 
 export default function LandingPage() {
-  return (
 
+  return (
     <main>
       <div className="absolute inset-0 -z-10 h-full w-full overflow-hidden">
         <Image
@@ -35,11 +36,13 @@ export default function LandingPage() {
               <p className="mt-8 max-w-2xl text-pretty text-lg">
                 FormPilot accelerates form creation with intelligent templates, instant previews, and real-time editing — so you can launch forms in minutes, not hours.</p>
               <div className="mt-12 items-center justify-center max-lg:hidden lg:justify-start">
-                <Button asChild size="lg" className="bg-primary font-semibold">
-                  <Link href="/dashboard">
-                    Start Building
-                  </Link>
-                </Button>
+                <Link href="/dashboard">
+                  <Button asChild size="lg" className="bg-primary font-semibold">
+                    <GradientSlideButton>
+                      Start Building
+                    </GradientSlideButton>
+                  </Button>
+                </Link>
               </div>
             </div>
             <Image
@@ -53,7 +56,7 @@ export default function LandingPage() {
         </div>
 
         {/* How It Works - Modern Steps */}
-        <section className="bg-background/80 py-20 px-4">
+        <section className="bg-background/80 py-24 px-4">
           <div className="max-w-6xl mx-auto text-center">
             <h2 className="text-3xl md:text-4xl font-bold mb-12">How FormPilot Works</h2>
             <div className="grid md:grid-cols-3 gap-12 text-left">
@@ -79,7 +82,7 @@ export default function LandingPage() {
         </section>
 
         {/* Pricing Section (dynamic) */}
-        <section className="bg-card py-20 px-4">
+        <section className="bg-card py-24 px-4">
           <div className="max-w-6xl mx-auto px-4">
             <PricingSection isHero={true} />
           </div>
