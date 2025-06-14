@@ -3,7 +3,7 @@
 import { getUserPlan } from '@/db/actions/user.actions';
 import { Plans } from '@/lib/constent';
 import { cn } from '@/lib/utils';
-import { useUser } from '@clerk/nextjs';
+import { useClerk, useUser } from '@clerk/nextjs';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
@@ -12,6 +12,7 @@ const PricingSection = ({ isHero }: { isHero?: boolean }) => {
     const [userPlan, setUserPlan] = useState<string>('free');
     const [userPeriod, setUserPeriod] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
+     const { openSignIn } = useClerk()
 
     useEffect(() => {
         const fetchPlan = async () => {
@@ -106,12 +107,18 @@ const PricingSection = ({ isHero }: { isHero?: boolean }) => {
                                 </span>
                             ) : plan.link && !loading ? (
                                 <Link
-                                    href={`${plan.link}?prefilled_email=${user?.primaryEmailAddress?.emailAddress}`}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
+                                    href={user ? `${plan.link}?prefilled_email=${user?.primaryEmailAddress?.emailAddress}` : '#'}
+                                    target={user ? '_blank' : undefined}
+                                    rel={user ? 'noopener noreferrer' : undefined}
                                     className={`inline-flex items-center justify-center w-full px-6 py-3 rounded-xl bg-primary text-white font-bold shadow-md text-sm border border-transparent hover:bg-primary/90 hover:scale-105 transition hover:border-indigo-400 ${userPlan !== 'free' ? 'opacity-60 pointer-events-none cursor-not-allowed' : ''}`}
                                     tabIndex={userPlan !== 'free' ? -1 : 0}
                                     aria-disabled={userPlan !== 'free'}
+                                    onClick={e => {
+                                        if (!user) {
+                                            e.preventDefault();
+                                            openSignIn();
+                                        }
+                                    }}
                                 >
                                     Upgrade Now
                                 </Link>

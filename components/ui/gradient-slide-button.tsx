@@ -14,8 +14,8 @@ interface GradientSlideButtonProps
 export function GradientSlideButton({
   children,
   className,
-  colorFrom = "#0284c7",
-  colorTo = "#2563eb",
+  colorFrom = "#007aff",
+  colorTo = "#312ecb",
   ...props
 }: GradientSlideButtonProps) {
   return (

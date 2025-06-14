@@ -16,7 +16,6 @@ const ShareButton = ({formId, title}: {formId:string, title:string}) => {
                     url: `/formPilot/${formId}`,
                 })
                 .catch((error) => {
-                    toast.error("Error sharing: " + error.message);
                     console.error("Error sharing:", error);
                 });
         } else {
