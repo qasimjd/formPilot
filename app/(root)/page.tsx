@@ -57,7 +57,7 @@ export default function LandingPage() {
 
         {/* How It Works - Modern Steps */}
         <section className="bg-background/80 py-24 px-4">
-          <div className="max-w-6xl mx-auto text-center">
+          <div className="max-w-6xl mx-auto text-center px-6">
             <h2 className="text-3xl md:text-4xl font-bold mb-12">How FormPilot Works</h2>
             <div className="grid md:grid-cols-3 gap-12 text-left">
               <div className="flex flex-col items-start space-y-4">

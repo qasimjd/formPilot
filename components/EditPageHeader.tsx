@@ -42,7 +42,7 @@ export default function EditPageHeader() {
                     <Button variant="outline" size="sm" asChild className="cursor-pointer font-semibold border-primary/40 bg-white/70 hover:bg-primary/10 transition-colors shadow">
                         <Link href="/dashboard">
                             <Save />
-                            Save
+                            Dashboard
                         </Link>
                     </Button>
 

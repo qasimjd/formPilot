@@ -27,6 +27,7 @@ const CreateForm = () => {
   }
 
   const handleGenerate = async () => {
+    if (!userPrompt.trim()) return;
     setLoading(true);
 
     let freeAndNoCredits = false;
