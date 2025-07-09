@@ -1,4 +1,56 @@
-import { ChartSplineIcon, HardDriveIcon, MessageCircleReplyIcon, ShieldPlusIcon } from "lucide-react";
+import { ChartSplineIcon, HardDriveIcon, MessageCircleReplyIcon, ShieldPlusIcon, Type, Mail, FileText, Hash, Phone, Calendar, ChevronDown, Circle } from "lucide-react";
+
+// Field types for form builder
+export const FIELD_TYPES = [
+  {
+    type: "text",
+    label: "Text Input",
+    icon: Type,
+    description: "Single line text input"
+  },
+  {
+    type: "email",
+    label: "Email",
+    icon: Mail,
+    description: "Email address input"
+  },
+  {
+    type: "textarea",
+    label: "Textarea",
+    icon: FileText,
+    description: "Multi-line text input"
+  },
+  {
+    type: "number",
+    label: "Number",
+    icon: Hash,
+    description: "Numeric input"
+  },
+  {
+    type: "tel",
+    label: "Phone",
+    icon: Phone,
+    description: "Phone number input"
+  },
+  {
+    type: "date",
+    label: "Date",
+    icon: Calendar,
+    description: "Date picker"
+  },
+  {
+    type: "dropdown",
+    label: "Dropdown",
+    icon: ChevronDown,
+    description: "Select from options"
+  },
+  {
+    type: "radio",
+    label: "Radio Buttons",
+    icon: Circle,
+    description: "Choose one option"
+  }
+];
 
 export const menuList = [
   {

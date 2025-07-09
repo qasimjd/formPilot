@@ -24,8 +24,8 @@ const ShareButton = ({formId, title}: {formId:string, title:string}) => {
     };
 
     return (
-        <Button size="sm" className="cursor-pointer font-semibold" onClick={handleNativeShare}>
-            <Share2 />
+        <Button size="sm" variant="outline" className="cursor-pointer font-semibold" onClick={handleNativeShare}>
+            <Share2 className="text-primary size-4" />
         </Button>
     )
 }

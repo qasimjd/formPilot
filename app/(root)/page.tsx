@@ -37,7 +37,7 @@ export default function LandingPage() {
                 FormPilot accelerates form creation with intelligent templates, instant previews, and real-time editing — so you can launch forms in minutes, not hours.</p>
               <div className="mt-12 items-center justify-center max-lg:hidden lg:justify-start">
                 <Link href="/dashboard">
-                  <Button asChild size="lg" className="bg-primary font-semibold">
+                  <Button asChild size="lg" className="bg-primary font-semibold cursor-pointer">
                     <GradientSlideButton>
                       Start Building
                     </GradientSlideButton>

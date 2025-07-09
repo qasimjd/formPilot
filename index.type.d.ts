@@ -7,6 +7,8 @@ interface Field {
   required?: boolean;
   options?: string[];
 }
+
+type Theme = "light" | "dark";
 interface FormDefinition {
   title: string;
   subheading?: string;
@@ -42,6 +44,11 @@ interface FormState {
   setTheme: (theme: Theme) => void;
   setFormBackground: (formBackground: string) => void;
   setBorderStyle: (borderStyle: string) => void;
+  
+  // Field management functions
+  addField: (field: Field) => void;
+  removeField: (fieldId: string) => void;
+  updateField: (fieldId: string, updates: Partial<Field>) => void;
 }
 interface FormCardProps {
   id: string;

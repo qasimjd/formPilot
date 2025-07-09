@@ -30,7 +30,8 @@ const Page = () => {
                     setLoading(false);
                     return;
                 }
-                setTheme(formData.theme);
+                const validTheme = (formData.theme === "light" || formData.theme === "dark") ? formData.theme : "light";
+                setTheme(validTheme);
                 setFormBackground(formData.formBackground);
                 setBorderStyle(formData.borderStyle);
                 try {
@@ -44,7 +45,7 @@ const Page = () => {
                     }
                     if (parsed.fields.length === 0) {
                         setError("This form has no fields. Please add at least one field.");
-                        setParsedFormData(parsed); 
+                        setParsedFormData(parsed);
                         return;
                     }
                     setParsedFormData(parsed);

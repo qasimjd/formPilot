@@ -94,12 +94,18 @@ export const renderField = (
 };
 
 const FormUi = ({ parsedFormData, id }: { parsedFormData: FormDefinition; id: string }) => {
-    const { theme, formBackground, borderStyle } = useFormStore();
+    const { theme, formBackground, borderStyle, fields: storeFields } = useFormStore();
     const [formData, setFormData] = useState<FormDefinition>(parsedFormData);
     const [loading, setLoading] = useState<boolean>(false);
     const [userInput, setUserInput] = useState<UserInputType>({});
 
     const pathname = usePathname();
+
+    // Combine fields from database and store (new fields added via AddFieldButton)
+    // Filter out store fields that might already exist in database fields
+    const dbFieldIds = formData.fields.map(field => field.id);
+    const newStoreFields = storeFields.filter(field => !dbFieldIds.includes(field.id));
+    const combinedFields = [...formData.fields, ...newStoreFields];
 
     const handleFieldChange = async () => {
         setLoading(true);
@@ -171,8 +177,8 @@ const FormUi = ({ parsedFormData, id }: { parsedFormData: FormDefinition; id: st
                         <FormSkeleton />
                     ) : (
                         <form className="space-y-6" onSubmit={handleSubmit}>
-                            {formData.fields.map((field: Field) => (
-                                <div key={field.name} className="space-y-2">
+                            {combinedFields.map((field: Field) => (
+                                <div key={field.id} className="space-y-2">
                                     <div className="flex items-center justify-between">
                                         <Label htmlFor={field.name} className="font-medium">
                                             {field.label}
