@@ -33,7 +33,7 @@ export default function EditFormSidebar({ formId }: { formId: string }) {
 				<RadioGroup
 					value={theme}
 					onValueChange={(val) => {
-						setTheme(val);
+						setTheme(val as Theme);
 						handleUpdate("theme", val);
 					}}
 					className="grid grid-cols-2"

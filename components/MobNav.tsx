@@ -7,14 +7,14 @@ import {
     SheetTrigger,
 } from "@/components/ui/sheet"
 import EditPageSidebar from "@/components/EditFormSidebar";
-import { Menu } from "lucide-react";
+import { PanelLeft } from "lucide-react";
 
 
 const MobNav = ({ formId }: { formId: string }) => {
     return (
         <aside>
             <Sheet>
-                <SheetTrigger><Menu className="size-6 text-primary" /></SheetTrigger>
+                <SheetTrigger><PanelLeft className="size-6 text-primary" /></SheetTrigger>
                 <SheetContent side="left" className="px-4">
                     <SheetHeader >
                         <SheetTitle className="sr-only">Nav</SheetTitle>

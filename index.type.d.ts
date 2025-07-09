@@ -8,7 +8,7 @@ interface Field {
   options?: string[];
 }
 
-type Theme = "light" | "dark";
+type Theme = "light" | "dark" | "bg-pink-50 text-gray-700" | "bg-white/80 backdrop-blur text-gray-800";
 interface FormDefinition {
   title: string;
   subheading?: string;
@@ -23,7 +23,7 @@ interface FormState {
   title: string;
   formId: string;
   fields: Field[];
-  theme: "light" | "dark";
+  theme: Theme;
   formBackground: string;
   borderStyle: string;
   previewMode: boolean;

@@ -155,8 +155,8 @@ const AddFieldButton = () => {
         <>
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                    <Button size="icon" className="right-2 z-10 cursor-pointer">
-                        <PlusIcon className='text-white size-5' />
+                    <Button size="icon" variant="outline" className="right-2 z-10 cursor-pointer" data-add-field-button>
+                        <PlusIcon className='text-primary size-5' />
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-56">
@@ -170,7 +170,7 @@ const AddFieldButton = () => {
                                 onClick={() => handleFieldTypeSelect(fieldType.type)}
                                 className="cursor-pointer"
                             >
-                                <IconComponent className="mr-2 h-4 w-4" />
+                                <IconComponent className="mr-2 h-4 w-4 text-primary" />
                                 <div className="flex flex-col">
                                     <span className="font-medium">{fieldType.label}</span>
                                     <span className="text-xs text-muted-foreground">{fieldType.description}</span>

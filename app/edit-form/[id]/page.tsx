@@ -33,6 +33,14 @@ const EditFormPage = () => {
     setForm,
   } = useFormStore();
 
+  // Type guard to check if a string is a valid Theme
+  const isValidTheme = (theme: string): theme is Theme => {
+    return theme === "light" || 
+           theme === "dark" || 
+           theme === "bg-pink-50 text-gray-700" || 
+           theme === "bg-white/80 backdrop-blur text-gray-800";
+  };
+
   useEffect(() => {
     const fetchForm = async () => {
       setLoading(true);
@@ -43,7 +51,7 @@ const EditFormPage = () => {
           throw new Error("Form not found or contains no data.");
         }
 
-        const validTheme = (formData.theme === "light" || formData.theme === "dark") ? formData.theme : "light";
+        const validTheme = isValidTheme(formData.theme) ? formData.theme : "light";
         setTheme(validTheme);
         setFormBackground(formData.formBackground);
         setBorderStyle(formData.borderStyle);
