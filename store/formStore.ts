@@ -26,5 +26,20 @@ export const useFormStore = create<FormState>((set) => ({
     setPlanStartsOn: (planStartsOn) => set({ planStartsOn }),
     setPlanEndsOn: (planEndsOn) => set({ planEndsOn }),
     setFreeCredits: (freeCredits) => set({ freeCredits }),
+    
+    // Field management functions
+    addField: (field) => set((state) => ({
+        fields: [...state.fields, field]
+    })),
+    
+    removeField: (fieldId) => set((state) => ({
+        fields: state.fields.filter(field => field.id !== fieldId)
+    })),
+    
+    updateField: (fieldId, updates) => set((state) => ({
+        fields: state.fields.map(field => 
+            field.id === fieldId ? { ...field, ...updates } : field
+        )
+    })),
 }));
 

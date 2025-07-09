@@ -155,6 +155,7 @@ export const deleteFieldFromDatabase = async (fieldId: string, formId: string) =
             })
             .where(and(eq(JsonForms.id, formId), eq(JsonForms.createdBy, userId)))
             .returning({ id: JsonForms.id });
+            revalidatePath(`/edit-form/${formId}`);
         if (updated.length === 0) {
             throw new Error("Failed to delete field");
         }
@@ -269,5 +270,39 @@ export const deleteFormById = async (id: string) => {
     } catch (error) {
         console.error('Error deleting form:', error);
         return false;
+    }
+};
+
+export const updateFormInDatabase = async (formData: string, formId: string) => {
+    try {
+        const { userId } = await auth();
+        if (!userId) {
+            throw new Error("Unauthorized: No user found");
+        }
+
+        // Verify the form exists and belongs to the user
+        const existingForm = await db
+            .select()
+            .from(JsonForms)
+            .where(and(eq(JsonForms.id, formId), eq(JsonForms.createdBy, userId)));
+
+        if (!existingForm.length) {
+            throw new Error("Form not found or access denied");
+        }
+
+        // Update the form
+        await db
+            .update(JsonForms)
+            .set({
+                formData: formData,
+                updatedAt: new Date(),
+            })
+            .where(and(eq(JsonForms.id, formId), eq(JsonForms.createdBy, userId)));
+
+        revalidatePath(`/edit-form/${formId}`);
+        return true;
+    } catch (error) {
+        console.error("Error updating form:", error);
+        throw new Error("Failed to update form");
     }
 };

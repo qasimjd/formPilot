@@ -2,11 +2,12 @@
 
 import { Button } from "@/components/ui/button";
 import { useFormStore } from "@/store/formStore";
-import { ArrowLeft, Eye, Save } from "lucide-react";
+import { ArrowLeft, Fullscreen } from "lucide-react";
 import ShareButton from "@/components/shareButton";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import MobNav from "./MobNav";
+import AddFieldButton from "./AddFieldButton";
 
 export default function EditPageHeader() {
 
@@ -32,21 +33,24 @@ export default function EditPageHeader() {
                 </div>
                 {/* Buttons (right) */}
                 <div className="flex gap-2 items-center">
-                    <Button variant="outline" size="sm" className="cursor-pointer font-semibold max-lg:hidden border-primary/40 bg-white/70 hover:bg-primary/10 transition-colors shadow"
+
+                    <AddFieldButton />
+
+                    <Button variant="outline" className="cursor-pointer font-semibold max-lg:hidden border-primary/40 bg-white/70 hover:bg-primary/10 transition-colors shadow"
                         onClick={() => setPreviewMode(!previewMode)}
                     >
-                        {previewMode ? <ArrowLeft className="mr-1" /> : <Eye className="mr-1" />}
-                        {previewMode ? 'Back' : 'Preview'}
+                        {previewMode ? <ArrowLeft /> : <Fullscreen className="font-bold size-4" />}
+                        {previewMode ? 'Back' : ''}
                     </Button>
+
+                    <ShareButton formId={formId} title={title} />
 
                     <Button variant="outline" size="sm" asChild className="cursor-pointer font-semibold border-primary/40 bg-white/70 hover:bg-primary/10 transition-colors shadow">
                         <Link href="/dashboard">
-                            <Save />
                             Dashboard
                         </Link>
                     </Button>
 
-                    <ShareButton formId={formId} title={title} />
                 </div>
             </div>
         </header>

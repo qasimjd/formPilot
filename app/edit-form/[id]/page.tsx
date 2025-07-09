@@ -30,6 +30,7 @@ const EditFormPage = () => {
     setTheme,
     setFormBackground,
     setBorderStyle,
+    setForm,
   } = useFormStore();
 
   useEffect(() => {
@@ -42,7 +43,8 @@ const EditFormPage = () => {
           throw new Error("Form not found or contains no data.");
         }
 
-        setTheme(formData.theme);
+        const validTheme = (formData.theme === "light" || formData.theme === "dark") ? formData.theme : "light";
+        setTheme(validTheme);
         setFormBackground(formData.formBackground);
         setBorderStyle(formData.borderStyle);
         setFormId(formData.id);
@@ -58,9 +60,12 @@ const EditFormPage = () => {
         if (parsed.fields.length === 0) {
           setError("This form has no fields. Please add at least one field.");
           setParsedFormData(parsed); // Still set so UI can render
+          setForm(parsed.title || "", []); // Set empty fields in store
           return;
         }
         setParsedFormData(parsed);
+        // Set the form data in the store so new fields can be added
+        setForm(parsed.title || "", parsed.fields || []);
       } catch (error) {
         console.error("Form fetch error:", error);
         setError("An unexpected error occurred.");

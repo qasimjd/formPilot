@@ -100,7 +100,7 @@ const Sidebar = () => {
               </div>
               <UserButton />
             </div>
-            <span className="text-sm text-muted-foreground px-1 truncate">{user?.primaryEmailAddress?.emailAddress ?? ''}</span>
+            <span className="text-xs text-center text-muted-foreground px-1 truncate">{user?.primaryEmailAddress?.emailAddress ?? ''}</span>
           </div>
         ) : (
           <>
