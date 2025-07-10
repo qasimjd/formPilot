@@ -21,11 +21,6 @@ import {
 import MobNav from "./MobNav";
 import AddFieldButton from "./AddFieldButton";
 import ShareButton from "@/components/shareButton";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip"
 
 export default function EditPageHeader() {
   const { previewMode, setPreviewMode, title, formId } = useFormStore();
@@ -119,21 +114,9 @@ export default function EditPageHeader() {
 
           {/* Desktop Actions */}
           <div className="hidden lg:flex items-center gap-2">
-            {!previewMode && (<Tooltip>
-              <TooltipTrigger> <AddFieldButton /></TooltipTrigger>
-              <TooltipContent>
-                <p>Add Coustom Field</p>
-              </TooltipContent>
-            </Tooltip>)}
+            {!previewMode && <AddFieldButton />}
 
-            <Tooltip>
-              <TooltipTrigger>
-                <ShareButton formId={formId} title={title} />
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Share Form</p>
-              </TooltipContent>
-            </Tooltip>
+            <ShareButton formId={formId} title={title} />
 
             <Button
               variant="outline"

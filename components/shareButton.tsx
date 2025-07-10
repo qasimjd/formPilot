@@ -3,8 +3,13 @@
 import { toast } from "sonner"
 import { Button } from "./ui/button";
 import { Share2 } from "lucide-react";
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from "@/components/ui/tooltip"
 
-const ShareButton = ({formId, title}: {formId:string, title:string}) => {
+const ShareButton = ({ formId, title }: { formId: string, title: string }) => {
 
 
     const handleNativeShare = () => {
@@ -24,9 +29,18 @@ const ShareButton = ({formId, title}: {formId:string, title:string}) => {
     };
 
     return (
-        <Button size="icon" className="cursor-pointer font-semibold" onClick={handleNativeShare} data-share-button>
-            <Share2 className="size-4" />
-        </Button>
+        <>
+            <Tooltip>
+                <TooltipTrigger asChild>
+                    <Button size="icon" className="cursor-pointer font-semibold" onClick={handleNativeShare} data-share-button>
+                        <Share2 className="size-4" />
+                    </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                    <p>Share Form</p>
+                </TooltipContent>
+            </Tooltip>
+        </>
     )
 }
 

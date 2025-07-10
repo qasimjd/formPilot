@@ -23,6 +23,11 @@ import { useFormStore } from '@/store/formStore'
 import { updateFormInDatabase, getFormById } from '@/db/actions/form.action'
 import { useParams } from 'next/navigation'
 import { toast } from 'sonner'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 
 
 const AddFieldButton = () => {
@@ -48,16 +53,16 @@ const AddFieldButton = () => {
     const handleFieldTypeSelect = (fieldType: string) => {
         setSelectedFieldType(fieldType);
         const fieldTypeConfig = FIELD_TYPES.find(f => f.type === fieldType);
-        
+
         // Set default values based on field type
         setFieldLabel(fieldTypeConfig?.label || fieldType);
         setFieldPlaceholder(`Enter ${fieldType === 'tel' ? 'phone number' : fieldType === 'textarea' ? 'your message' : fieldType}`);
-        
+
         // Initialize options for dropdown/radio
         if (fieldType === 'dropdown' || fieldType === 'radio') {
             setOptions(['Option 1', 'Option 2', 'Option 3']);
         }
-        
+
         // Use setTimeout to ensure dropdown closes before dialog opens
         setTimeout(() => {
             setIsDialogOpen(true);
@@ -84,7 +89,7 @@ const AddFieldButton = () => {
         setIsSaving(true);
         try {
             const fieldId = `field_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-            
+
             // Generate field name from field label
             const generateFieldName = (label: string) => {
                 return label
@@ -94,7 +99,7 @@ const AddFieldButton = () => {
                     .replace(/^_+|_+$/g, '') // Remove leading/trailing underscores
                     || selectedFieldType; // Fallback to field type if label is empty after processing
             };
-            
+
             const newField: Field = {
                 id: fieldId,
                 name: generateFieldName(fieldLabel.trim()),
@@ -102,8 +107,8 @@ const AddFieldButton = () => {
                 type: selectedFieldType,
                 placeholder: fieldPlaceholder.trim(),
                 required: isRequired,
-                options: (selectedFieldType === 'dropdown' || selectedFieldType === 'radio') 
-                    ? options.filter(opt => opt.trim() !== '') 
+                options: (selectedFieldType === 'dropdown' || selectedFieldType === 'radio')
+                    ? options.filter(opt => opt.trim() !== '')
                     : undefined
             };
 
@@ -114,21 +119,21 @@ const AddFieldButton = () => {
             if (typeof parsed === "string") {
                 parsed = JSON.parse(parsed);
             }
-            
+
             // Add the new field to the existing fields
             const updatedFormData = {
                 ...parsed,
                 fields: [...(parsed.fields || []), newField]
             };
-            
+
             // Save to database
             await updateFormInDatabase(JSON.stringify(updatedFormData), formId);
-            
+
             // Add field to store for immediate UI update
             addField(newField);
-            
+
             toast.success('Field added successfully!');
-            
+
             // Close dialog and reset form
             setIsDialogOpen(false);
             setTimeout(() => {
@@ -155,9 +160,16 @@ const AddFieldButton = () => {
         <>
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                    <Button size="icon" variant="outline" className="right-2 z-10 cursor-pointer" data-add-field-button>
-                        <PlusIcon className='text-primary size-5' />
-                    </Button>
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <Button size="icon" variant="outline" className="right-2 z-10 cursor-pointer" data-add-field-button>
+                                <PlusIcon className='text-primary size-5' />
+                            </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                            <p>Add Coustom Field</p>
+                        </TooltipContent>
+                    </Tooltip>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-56">
                     <DropdownMenuLabel>Add Field Type</DropdownMenuLabel>
@@ -165,7 +177,7 @@ const AddFieldButton = () => {
                     {FIELD_TYPES.map((fieldType) => {
                         const IconComponent = fieldType.icon;
                         return (
-                            <DropdownMenuItem 
+                            <DropdownMenuItem
                                 key={fieldType.type}
                                 onClick={() => handleFieldTypeSelect(fieldType.type)}
                                 className="cursor-pointer"
@@ -200,7 +212,7 @@ const AddFieldButton = () => {
                             Customize your field settings below
                         </DialogDescription>
                     </DialogHeader>
-                    
+
                     <div className="space-y-4">
                         <div className="space-y-2">
                             <Label htmlFor="fieldLabel">Field Label</Label>
@@ -237,9 +249,9 @@ const AddFieldButton = () => {
                             <div className="space-y-2">
                                 <div className="flex items-center justify-between">
                                     <Label>Options</Label>
-                                    <Button 
-                                        type="button" 
-                                        variant="outline" 
+                                    <Button
+                                        type="button"
+                                        variant="outline"
                                         size="sm"
                                         onClick={handleAddOption}
                                     >
@@ -280,7 +292,7 @@ const AddFieldButton = () => {
                         >
                             Cancel
                         </Button>
-                        <Button 
+                        <Button
                             type="button"
                             onClick={handleCreateField}
                             disabled={!fieldLabel.trim() || isSaving}

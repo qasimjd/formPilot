@@ -6,6 +6,12 @@ import Link from 'next/link';
 import ShareButton from './shareButton';
 import DeleteFormButton from './DeleteFormButton';
 import ExportToExcelButton from './ExportToExcelButton';
+import { Edit } from 'lucide-react';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from "@/components/ui/tooltip"
 
 
 const FormCard = React.memo(function FormCard({ id, title, createdAt, variant, responsesCount }: FormCardProps) {
@@ -34,22 +40,26 @@ const FormCard = React.memo(function FormCard({ id, title, createdAt, variant, r
             <CardContent className="flex flex-row flex-wrap gap-2 justify-end mt-2 pb-4">
                 {variant === "formCard" ? (
                     <>
-                        <Button
-                            asChild
-                            variant="outline"
-                            size="sm"
-                            className="rounded-lg border-primary/30 bg-white/60 dark:bg-gray-900/60 hover:bg-primary/10 hover:border-primary/60 transition-colors"
-                        >
-                            <Link href={`/edit-form/${id}`}>Edit</Link>
-                        </Button>
-                        <Button
-                            asChild
-                            variant="outline"
-                            size="sm"
-                            className="rounded-lg border-primary/30 bg-white/60 dark:bg-gray-900/60 hover:bg-primary/10 hover:border-primary/60 transition-colors"
-                        >
-                            <ShareButton formId={id} title={title} />
-                        </Button>
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <Button
+                                    asChild
+                                    variant="outline"
+                                    size="icon"
+                                    className="font-semibold cursor-pointer"
+                                >
+                                    <Link href={`/edit-form/${id}`}>
+                                        <Edit className="size-4 text-primary" />
+                                    </Link>
+                                </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                <p>Edit Form</p>
+                            </TooltipContent>
+                        </Tooltip>
+
+
+                        <ShareButton formId={id} title={title} />
                     </>
                 ) : (
                     <>
