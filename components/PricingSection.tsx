@@ -12,7 +12,7 @@ const PricingSection = ({ isHero }: { isHero?: boolean }) => {
     const [userPlan, setUserPlan] = useState<string>('free');
     const [userPeriod, setUserPeriod] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
-     const { openSignIn } = useClerk()
+    const { openSignIn } = useClerk()
 
     useEffect(() => {
         const fetchPlan = async () => {
@@ -101,10 +101,14 @@ const PricingSection = ({ isHero }: { isHero?: boolean }) => {
                             <p className="text-gray-500 text-sm mb-6 text-center">
                                 {plan.description}
                             </p>
-                            {!loading && isCurrent ? (
+                            {!loading && isCurrent && user ? (
                                 <span className="inline-flex items-center justify-center w-full px-6 py-3 rounded-xl bg-gray-200 text-gray-600 font-bold shadow-md text-sm border border-gray-300 cursor-not-allowed">
                                     {isYearly ? 'Yearly Plan Active' : isMonthly ? 'Monthly Plan Active' : 'Current Plan'}
                                 </span>
+                            ) : !loading && isCurrent && !user ? (
+                                <Link href="/sign-up" className="inline-flex items-center justify-center w-full px-6 py-3 rounded-xl bg-primary text-white font-bold shadow-md text-sm">
+                                    {isYearly ? 'Yearly Plan Active' : isMonthly ? 'Monthly Plan Active' : 'Start Building'}
+                                </Link>
                             ) : plan.link && !loading ? (
                                 <Link
                                     href={user ? `${plan.link}?prefilled_email=${user?.primaryEmailAddress?.emailAddress}` : '#'}

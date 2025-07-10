@@ -159,18 +159,18 @@ const AddFieldButton = () => {
     return (
         <>
             <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                    <Tooltip>
-                        <TooltipTrigger asChild>
-                            <Button size="icon" variant="outline" className="right-2 z-10 cursor-pointer" data-add-field-button>
+                <Tooltip>
+                    <TooltipTrigger asChild>
+                        <DropdownMenuTrigger asChild>
+                            <Button size="icon" variant="outline" className="right-2 z-10 cursor-pointer">
                                 <PlusIcon className='text-primary size-5' />
                             </Button>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                            <p>Add Coustom Field</p>
-                        </TooltipContent>
-                    </Tooltip>
-                </DropdownMenuTrigger>
+                        </DropdownMenuTrigger>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                        <p>Add Coustom Field</p>
+                    </TooltipContent>
+                </Tooltip>
                 <DropdownMenuContent className="w-56">
                     <DropdownMenuLabel>Add Field Type</DropdownMenuLabel>
                     <DropdownMenuSeparator />
