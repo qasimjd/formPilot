@@ -22,6 +22,11 @@ import {
 import MobNav from "./MobNav";
 import AddFieldButton from "./AddFieldButton";
 import ShareButton from "@/components/shareButton";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 
 export default function EditPageHeader() {
   const { previewMode, setPreviewMode, title, formId } = useFormStore();
@@ -83,7 +88,8 @@ export default function EditPageHeader() {
         {/* Right: Actions */}
         <div className="flex items-center gap-2 flex-shrink-0">
           {/* Mobile Menu */}
-          <div className="lg:hidden">
+          <div className="lg:hidden flex items-center gap-2">
+            <AddFieldButton />
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
@@ -95,17 +101,6 @@ export default function EditPageHeader() {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-48">
-                {!previewMode && (
-                  <>
-                    <DropdownMenuItem
-                      onClick={() => triggerClick("[data-add-field-button]")}
-                    >
-                      <Plus className="size-4 mr-2" />
-                      Add Field
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                  </>
-                )}
                 <DropdownMenuItem
                   onClick={() => triggerClick("[data-share-button]")}
                 >
@@ -115,7 +110,7 @@ export default function EditPageHeader() {
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
                   <Link href="/dashboard" className="flex items-center">
-                    <LayoutDashboard className="size-4 mr-2" />
+                    <LayoutDashboard className="size-4" />
                     Dashboard
                   </Link>
                 </DropdownMenuItem>
@@ -125,23 +120,35 @@ export default function EditPageHeader() {
 
           {/* Desktop Actions */}
           <div className="hidden lg:flex items-center gap-2">
-            {!previewMode && <AddFieldButton />}
+            {!previewMode && (<Tooltip>
+              <TooltipTrigger> <AddFieldButton /></TooltipTrigger>
+              <TooltipContent>
+                <p>Add Coustom Field</p>
+              </TooltipContent>
+            </Tooltip>)}
 
-            <ShareButton formId={formId} title={title} />
+            <Tooltip>
+              <TooltipTrigger>
+                <ShareButton formId={formId} title={title} />
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Share Form</p>
+              </TooltipContent>
+            </Tooltip>
 
             <Button
               variant="outline"
               onClick={() => setPreviewMode(!previewMode)}
-              className="transition shadow hover:scale-[1.03]"
+              className="transition shadow hover:scale-[1.03] cursor-pointer"
             >
               {previewMode ? (
                 <>
-                  <ArrowLeft className="size-4 mr-2" />
+                  <ArrowLeft className="size-4 text-primary" />
                   Edit
                 </>
               ) : (
                 <>
-                  <Fullscreen className="size-4 mr-2" />
+                  <Fullscreen className="size-4 text-primary" />
                   Preview
                 </>
               )}
@@ -149,7 +156,7 @@ export default function EditPageHeader() {
 
             <Button asChild variant="outline" className="transition shadow hover:scale-[1.03]">
               <Link href="/dashboard" className="flex items-center gap-1.5">
-                <LayoutDashboard className="size-4" />
+                <LayoutDashboard className="size-4 text-primary" />
                 <span className="hidden lg:inline">Dashboard</span>
               </Link>
             </Button>
