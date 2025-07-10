@@ -7,7 +7,6 @@ import {
   ArrowLeft,
   Fullscreen,
   LayoutDashboard,
-  Plus,
   Share2,
   EllipsisVertical,
 } from "lucide-react";
